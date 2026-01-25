@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class DoctorAvailability extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'doctor_id',
+        'date',
+        'day_of_week',
+        'start_time',
+        'end_time',
+        'is_available',
+    ];
+
+    protected $casts = [
+        'is_available' => 'integer',
+    ];
+
+    // Quan hệ với Doctor
+    public function doctorProfile()
+    {
+        return $this->belongsTo(DoctorProfile::class, 'doctor_id');
+    }
+}
