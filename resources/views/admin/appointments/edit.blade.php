@@ -88,7 +88,7 @@
 
                         <div class="form-group">
                             <label for="patient_note">Patient's Note</label>
-                            <textarea name="patient_note" id="patient_note" class="form-control" rows="3" placeholder="Describe symptoms, reasons for check-upsymptom">{{ $appointment->patient_note }}</textarea>
+                            <textarea name="patient_note" id="patient_note" class="form-control" rows="3" placeholder="Describe symptoms, reasons for check-up">{{ $appointment->patient_note }}</textarea>
                         </div>
 
                         <div class="form-group">
