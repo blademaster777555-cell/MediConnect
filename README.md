@@ -4,6 +4,11 @@
 
 A medical appointment scheduling management system between patients and doctors.
 
+## 🔎 Project Overview
+
+Mediconnect is a web-based platform created to bridge the gap between patients and doctors by providing a convenient and user-friendly healthcare solution.
+It helps patients easily book medical appointments, communicate with doctors, and access trustworthy health information, reducing the time and effort usually spent on traditional healthcare processes.
+
 ## 👥 Team Members
 
 * **Đào Nhuận Phát** - Student1685476 - *Project Lead*
@@ -13,13 +18,12 @@ A medical appointment scheduling management system between patients and doctors.
 
 ## 📁 Documents
 
-* [Documents](./documents)
+* [Documents](https://github.com/blademaster777555-cell/MediConnect/tree/main/Document)
 
 ## 🧑‍💻 Tech used
 
 * Laravel 10
 * Tailwind CSS
-* Vite
 * MySQL
 * HTML
 * Blade Template Engine
@@ -91,13 +95,13 @@ Doctors can create account, but patients can only book with the newly registered
 
 
 
-Demo Accounts:
+## Demo Accounts:
 
-Patient: khack1@mediconnect.com
+ * Patient: khack1@mediconnect.com
 
-Doctor:bacsiquang@mediconnect.com
+ * Doctor:bacsiquang@mediconnect.com
 
-Admin:admin@mediconnect.com
+ * Admin:admin@mediconnect.com
 
-Password for all demo account: 12345678
+ Password for all demo account: 12345678
 
