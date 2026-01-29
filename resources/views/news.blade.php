@@ -25,7 +25,7 @@
                         <small class="text-muted">
                             <i class="bi bi-calendar me-1"></i>{{ \Carbon\Carbon::parse($article['date'])->format('d/m/Y') }}
                         </small>
-                        <a href="#" class="btn btn-outline-primary btn-sm">Đọc thêm</a>
+                        <a href="{{ route('posts.detail', $article->id) }}" class="btn btn-outline-primary btn-sm">Đọc thêm</a>
                     </div>
                 </div>
             </div>

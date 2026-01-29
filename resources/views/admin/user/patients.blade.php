@@ -3,9 +3,6 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2>{{ __('Quản lý Bệnh nhân') }}</h2>
-    <a href="{{ route('users.create') }}?role=patient" class="btn btn-primary">
-        <i class="bi bi-plus-lg"></i> {{ __('Thêm Bệnh nhân') }}
-    </a>
 </div>
 
 <div class="card shadow-sm">
@@ -33,11 +30,11 @@
                     <td>{{ $user->created_at->format('d/m/Y') }}</td>
                     <td>
                         <div class="d-flex gap-2">
-                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary">
-                                <i class="bi bi-pencil-square"></i> {{ __('Sửa') }}
+                            <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-info text-white">
+                                <i class="bi bi-eye"></i> {{ __('Xem') }}
                             </a>
 
-                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ __('Bạn chắc chắn muốn xóa?') }}');">
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirmDelete(event, this);">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">

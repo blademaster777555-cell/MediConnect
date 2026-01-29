@@ -21,7 +21,8 @@ class UpdateDoctorProfileRequest extends FormRequest
             'bio' => 'nullable|string|max:1000',
             'license_number' => 'nullable|string|max:50',
             'consultation_fee' => 'nullable|numeric|min:0',
-            'certificate' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'certificate' => 'nullable|array',
+            'certificate.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
