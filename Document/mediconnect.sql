@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jan 29, 2026 at 03:18 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th1 24, 2026 lúc 01:55 PM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,12 +18,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `mediconnect`
+-- Cơ sở dữ liệu: `mediconnect`
 --
 
 DELIMITER $$
 --
--- Procedures
+-- Thủ tục
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AddColumnIfNotExists` ()   BEGIN
     -- Thêm license_number
@@ -41,7 +41,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `appointments`
+-- Cấu trúc bảng cho bảng `appointments`
 --
 
 CREATE TABLE `appointments` (
@@ -62,7 +62,7 @@ CREATE TABLE `appointments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `appointments`
+-- Đang đổ dữ liệu cho bảng `appointments`
 --
 
 INSERT INTO `appointments` (`id`, `doctor_id`, `patient_id`, `schedule_id`, `created_by`, `booking_type`, `date`, `time`, `patient_note`, `status`, `fee`, `payment_status`, `created_at`, `updated_at`) VALUES
@@ -81,17 +81,12 @@ INSERT INTO `appointments` (`id`, `doctor_id`, `patient_id`, `schedule_id`, `cre
 (34, 2, 13, NULL, NULL, 'patient', '2026-01-26', '10:30:00', 'mmm', 'confirmed', 70.00, 'paid', '2026-01-24 03:13:42', '2026-01-24 03:16:01'),
 (35, 5, 13, NULL, NULL, 'patient', '2026-01-26', '09:00:00', 'kkkk', 'cancelled', 100.00, 'refunded', '2026-01-24 03:14:23', '2026-01-24 03:39:38'),
 (36, 5, 13, NULL, NULL, 'patient', '2026-01-25', '09:00:00', 'Đau tim', 'confirmed', 100.00, 'paid', '2026-01-24 04:04:35', '2026-01-24 04:05:28'),
-(37, 5, 12, NULL, NULL, 'patient', '2026-01-25', '09:30:00', 'Sốt', 'pending', 100.00, 'paid', '2026-01-24 04:05:08', '2026-01-24 04:05:08'),
-(38, 2, 12, NULL, NULL, 'patient', '2026-01-26', '10:00:00', NULL, 'pending', 70.00, 'paid', '2026-01-24 19:55:42', '2026-01-24 19:55:42'),
-(39, 1, 12, NULL, NULL, 'patient', '2026-01-26', '16:30:00', 'unclear', 'cancelled', 50.00, 'forfeited', '2026-01-24 19:58:07', '2026-01-24 20:00:01'),
-(40, 4, 8, NULL, NULL, 'patient', '2026-01-26', '09:00:00', NULL, 'completed', 50.00, 'paid', '2026-01-24 20:07:47', '2026-01-24 20:09:50'),
-(45, 6, 12, NULL, NULL, 'patient', '2026-01-26', '10:30:00', NULL, 'cancelled', 50.00, 'refunded', '2026-01-24 22:19:58', '2026-01-24 22:21:23'),
-(46, 6, 12, NULL, NULL, 'patient', '2026-01-26', '11:00:00', NULL, 'completed', 50.00, 'paid', '2026-01-24 22:20:08', '2026-01-24 22:21:27');
+(37, 5, 12, NULL, NULL, 'patient', '2026-01-25', '09:30:00', 'Sốt', 'pending', 100.00, 'paid', '2026-01-24 04:05:08', '2026-01-24 04:05:08');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cache`
+-- Cấu trúc bảng cho bảng `cache`
 --
 
 CREATE TABLE `cache` (
@@ -101,7 +96,7 @@ CREATE TABLE `cache` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `cache`
+-- Đang đổ dữ liệu cho bảng `cache`
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
@@ -119,7 +114,7 @@ INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cache_locks`
+-- Cấu trúc bảng cho bảng `cache_locks`
 --
 
 CREATE TABLE `cache_locks` (
@@ -131,7 +126,7 @@ CREATE TABLE `cache_locks` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cities`
+-- Cấu trúc bảng cho bảng `cities`
 --
 
 CREATE TABLE `cities` (
@@ -142,7 +137,7 @@ CREATE TABLE `cities` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `cities`
+-- Đang đổ dữ liệu cho bảng `cities`
 --
 
 INSERT INTO `cities` (`id`, `name`, `created_at`, `updated_at`) VALUES
@@ -161,7 +156,7 @@ INSERT INTO `cities` (`id`, `name`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contact_messages`
+-- Cấu trúc bảng cho bảng `contact_messages`
 --
 
 CREATE TABLE `contact_messages` (
@@ -178,7 +173,7 @@ CREATE TABLE `contact_messages` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `doctor_availabilities`
+-- Cấu trúc bảng cho bảng `doctor_availabilities`
 --
 
 CREATE TABLE `doctor_availabilities` (
@@ -194,7 +189,7 @@ CREATE TABLE `doctor_availabilities` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `doctor_availabilities`
+-- Đang đổ dữ liệu cho bảng `doctor_availabilities`
 --
 
 INSERT INTO `doctor_availabilities` (`id`, `doctor_id`, `day_of_week`, `date`, `start_time`, `end_time`, `is_available`, `created_at`, `updated_at`) VALUES
@@ -300,7 +295,7 @@ INSERT INTO `doctor_availabilities` (`id`, `doctor_id`, `day_of_week`, `date`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `doctor_profiles`
+-- Cấu trúc bảng cho bảng `doctor_profiles`
 --
 
 CREATE TABLE `doctor_profiles` (
@@ -322,25 +317,24 @@ CREATE TABLE `doctor_profiles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `doctor_profiles`
+-- Đang đổ dữ liệu cho bảng `doctor_profiles`
 --
 
 INSERT INTO `doctor_profiles` (`id`, `user_id`, `specialization_id`, `bio`, `phone`, `license_number`, `consultation_fee`, `is_approved`, `certificate`, `image`, `degree`, `experience_years`, `created_at`, `updated_at`, `city_id`) VALUES
 (1, 2, 1, 'Trưởng khoa tim mạch với 10 năm kinh nghiệm.', '0123456789', NULL, 50.00, 1, NULL, NULL, 'Tiến sĩ Y khoa', 0, NULL, '2026-01-22 09:04:46', 7),
 (2, 7, 4, 'Bác sĩ nội dày dặn kinh nghiệm. Chuyên khoa 2 bệnh viện Đại học Y dược', '0123456789', NULL, 70.00, 1, NULL, NULL, NULL, 0, '2026-01-17 04:53:07', '2026-01-22 09:04:42', 2),
 (3, 8, 2, 'Bác sĩ Nhi có kinh nghiệm dày dặn. Luôn vui vẻ với trẻ con', '0909121737', NULL, 60.00, 1, NULL, NULL, NULL, 0, '2026-01-17 04:54:28', '2026-01-22 09:04:40', 8),
-(4, 6, 1, 'Bác sĩ tim mạch chuyên khoa 2 Bệnh viện Phạm Ngọc Thạch', '0123456789', NULL, 50.00, 1, NULL, NULL, NULL, 0, '2026-01-17 05:03:01', '2026-01-24 20:12:18', 5),
+(4, 6, 1, 'Bác sĩ tim mạch chuyên khoa 2 Bệnh viện Phạm Ngọc Thạch', '0123456789', NULL, 50.00, 1, NULL, NULL, NULL, 0, '2026-01-17 05:03:01', '2026-01-22 09:26:35', 3),
 (5, 10, 1, 'Tiến sĩ Tim mạch. Chuyên khoa 2 Đại học Y dược. Giảng viên dạy và đào tạo nhiều bác sĩ tại trường Đại học Y dược Hồ Chí Minh', '0931185932', NULL, 100.00, 1, NULL, NULL, NULL, 0, '2026-01-17 05:43:41', '2026-01-22 09:04:38', 2),
 (6, 11, 3, 'Bác sĩ chuyên khoa da liễu.', '0123456789', NULL, 50.00, 1, NULL, NULL, NULL, 0, '2026-01-17 06:09:36', '2026-01-22 09:04:34', 1),
 (8, 15, 6, 'Bác sĩ Răng Hàm Mặt Tổng quát', '0123456789', NULL, 30.00, 1, NULL, NULL, NULL, 0, '2026-01-24 00:41:49', '2026-01-24 01:04:21', 2),
 (9, 16, NULL, 'Chưa cập nhật tiểu sử', '0123456789', NULL, 0.00, 0, NULL, NULL, NULL, 0, '2026-01-24 03:15:24', '2026-01-24 03:15:24', 2),
-(10, 18, 1, 'Chưa cập nhật tiểu sử', '0123456789', NULL, 0.00, 1, NULL, NULL, NULL, 0, '2026-01-24 05:25:45', '2026-01-24 05:26:56', 2),
-(11, 1, NULL, 'Chưa cập nhật tiểu sử', '', NULL, 0.00, 0, NULL, NULL, NULL, 0, '2026-01-24 22:19:15', '2026-01-24 22:19:15', NULL);
+(10, 18, 1, 'Chưa cập nhật tiểu sử', '0123456789', NULL, 0.00, 1, NULL, NULL, NULL, 0, '2026-01-24 05:25:45', '2026-01-24 05:26:56', 2);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `failed_jobs`
+-- Cấu trúc bảng cho bảng `failed_jobs`
 --
 
 CREATE TABLE `failed_jobs` (
@@ -356,7 +350,7 @@ CREATE TABLE `failed_jobs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `feedbacks`
+-- Cấu trúc bảng cho bảng `feedbacks`
 --
 
 CREATE TABLE `feedbacks` (
@@ -371,7 +365,7 @@ CREATE TABLE `feedbacks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `feedbacks`
+-- Đang đổ dữ liệu cho bảng `feedbacks`
 --
 
 INSERT INTO `feedbacks` (`id`, `user_id`, `doctor_id`, `appointment_id`, `rating`, `comment`, `created_at`, `updated_at`) VALUES
@@ -381,7 +375,7 @@ INSERT INTO `feedbacks` (`id`, `user_id`, `doctor_id`, `appointment_id`, `rating
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jobs`
+-- Cấu trúc bảng cho bảng `jobs`
 --
 
 CREATE TABLE `jobs` (
@@ -397,7 +391,7 @@ CREATE TABLE `jobs` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `job_batches`
+-- Cấu trúc bảng cho bảng `job_batches`
 --
 
 CREATE TABLE `job_batches` (
@@ -416,7 +410,7 @@ CREATE TABLE `job_batches` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `medical_content`
+-- Cấu trúc bảng cho bảng `medical_content`
 --
 
 CREATE TABLE `medical_content` (
@@ -432,7 +426,7 @@ CREATE TABLE `medical_content` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `medical_content`
+-- Đang đổ dữ liệu cho bảng `medical_content`
 --
 
 INSERT INTO `medical_content` (`id`, `title`, `content`, `category`, `image`, `author_id`, `published_date`, `created_at`, `updated_at`) VALUES
@@ -448,7 +442,7 @@ INSERT INTO `medical_content` (`id`, `title`, `content`, `category`, `image`, `a
 -- --------------------------------------------------------
 
 --
--- Table structure for table `medical_records`
+-- Cấu trúc bảng cho bảng `medical_records`
 --
 
 CREATE TABLE `medical_records` (
@@ -464,7 +458,7 @@ CREATE TABLE `medical_records` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `migrations`
+-- Cấu trúc bảng cho bảng `migrations`
 --
 
 CREATE TABLE `migrations` (
@@ -474,7 +468,7 @@ CREATE TABLE `migrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `migrations`
+-- Đang đổ dữ liệu cho bảng `migrations`
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
@@ -515,7 +509,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notifications`
+-- Cấu trúc bảng cho bảng `notifications`
 --
 
 CREATE TABLE `notifications` (
@@ -530,34 +524,24 @@ CREATE TABLE `notifications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `notifications`
+-- Đang đổ dữ liệu cho bảng `notifications`
 --
 
 INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
 ('009f142d-65c5-4d48-96ac-bc6ce45219b7', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":32,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #32\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', '2026-01-24 05:19:50', '2026-01-24 02:21:11', '2026-01-24 05:19:50'),
-('030aa077-1caa-40a5-9e06-fb8d4cef1a68', 'App\\Notifications\\NewDoctorRegistered', 'App\\Models\\User', 1, '{\"type\":\"new_doctor\",\"user_id\":21,\"message\":\"B\\u00e1c s\\u0129 m\\u1edbi \\u0111\\u0103ng k\\u00fd: Tr\\u1ecdng Ho\\u00e0ng\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/doctors\"}', NULL, '2026-01-26 19:58:54', '2026-01-26 19:58:54'),
-('08508a58-58de-4f9b-bf4b-6a11da743121', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":42,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #42\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', NULL, '2026-01-24 22:08:21', '2026-01-24 22:08:21'),
-('0f55a5b6-a638-4dbc-9ea7-7970adb77966', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":39,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #39\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', NULL, '2026-01-24 19:58:07', '2026-01-24 19:58:07'),
 ('12483293-5027-49d7-aba2-0123cca66649', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":34,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #34\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', '2026-01-24 05:19:50', '2026-01-24 03:13:42', '2026-01-24 05:19:50'),
 ('192ff555-bcea-499d-afdf-86985a0de0e2', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":31,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #31\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', '2026-01-24 02:20:29', '2026-01-24 02:05:29', '2026-01-24 02:20:29'),
-('28e0a1a8-6b33-40b7-b7d8-6086c3fa7eed', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":43,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #43\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', NULL, '2026-01-24 22:10:34', '2026-01-24 22:10:34'),
 ('2dfbe093-a278-4dc4-9495-04410805a70a', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":35,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #35\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', '2026-01-24 05:19:50', '2026-01-24 03:14:23', '2026-01-24 05:19:50'),
-('3ac5f3fe-c11e-412c-b5c2-0f7b045cc37d', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":46,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #46\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', NULL, '2026-01-24 22:20:08', '2026-01-24 22:20:08'),
-('5858f057-5421-4e21-b4e5-b3dbb3cbfe0e', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":38,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #38\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', NULL, '2026-01-24 19:55:44', '2026-01-24 19:55:44'),
 ('65b21fda-21c2-4bb9-aa49-b09f4060bdec', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":36,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #36\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', '2026-01-24 05:19:50', '2026-01-24 04:04:35', '2026-01-24 05:19:50'),
-('76ab6804-6f83-4ad4-9300-e009d667ee11', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":41,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #41\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', NULL, '2026-01-24 22:04:46', '2026-01-24 22:04:46'),
 ('8cd5dd95-bb88-4543-b05a-4505be1f501c', 'App\\Notifications\\NewDoctorRegistered', 'App\\Models\\User', 1, '{\"type\":\"new_doctor\",\"user_id\":18,\"message\":\"B\\u00e1c s\\u0129 m\\u1edbi \\u0111\\u0103ng k\\u00fd: Minh Ho\\u00e0ng\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/doctors\"}', '2026-01-24 05:27:20', '2026-01-24 05:25:45', '2026-01-24 05:27:20'),
-('9be3a638-f56e-464b-97aa-d2192fbbb422', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":44,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #44\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', NULL, '2026-01-24 22:12:31', '2026-01-24 22:12:31'),
 ('af5cac42-3670-480a-8e43-3c8b8ac2518c', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":30,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #30\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', '2026-01-24 01:34:48', '2026-01-24 01:34:16', '2026-01-24 01:34:48'),
-('c527f586-a29e-48fc-a359-ac181c19f2c5', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":45,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #45\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', NULL, '2026-01-24 22:19:58', '2026-01-24 22:19:58'),
 ('d4d938ca-dd63-40fc-b147-2e2ed300563d', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":33,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #33\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', '2026-01-24 05:19:50', '2026-01-24 03:04:11', '2026-01-24 05:19:50'),
-('e6441295-82ef-44b5-a0e6-5495289ce7dc', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":40,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #40\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', NULL, '2026-01-24 20:07:47', '2026-01-24 20:07:47'),
 ('f4682207-2540-4e4d-bb38-e33784fd7ade', 'App\\Notifications\\NewAppointmentCreated', 'App\\Models\\User', 1, '{\"type\":\"new_appointment\",\"appointment_id\":37,\"message\":\"L\\u1ecbch h\\u1eb9n m\\u1edbi #37\",\"link\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/appointments\"}', '2026-01-24 05:19:50', '2026-01-24 04:05:08', '2026-01-24 05:19:50');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `patients`
+-- Cấu trúc bảng cho bảng `patients`
 --
 
 CREATE TABLE `patients` (
@@ -575,7 +559,7 @@ CREATE TABLE `patients` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `patient_profiles`
+-- Cấu trúc bảng cho bảng `patient_profiles`
 --
 
 CREATE TABLE `patient_profiles` (
@@ -591,7 +575,7 @@ CREATE TABLE `patient_profiles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `patient_profiles`
+-- Đang đổ dữ liệu cho bảng `patient_profiles`
 --
 
 INSERT INTO `patient_profiles` (`id`, `user_id`, `phone`, `address`, `date_of_birth`, `gender`, `medical_history`, `created_at`, `updated_at`) VALUES
@@ -607,7 +591,7 @@ INSERT INTO `patient_profiles` (`id`, `user_id`, `phone`, `address`, `date_of_bi
 -- --------------------------------------------------------
 
 --
--- Table structure for table `posts`
+-- Cấu trúc bảng cho bảng `posts`
 --
 
 CREATE TABLE `posts` (
@@ -623,7 +607,7 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `posts`
+-- Đang đổ dữ liệu cho bảng `posts`
 --
 
 INSERT INTO `posts` (`id`, `title`, `slug`, `summary`, `content`, `image`, `type`, `created_at`, `updated_at`) VALUES
@@ -634,7 +618,7 @@ INSERT INTO `posts` (`id`, `title`, `slug`, `summary`, `content`, `image`, `type
 -- --------------------------------------------------------
 
 --
--- Table structure for table `schedules`
+-- Cấu trúc bảng cho bảng `schedules`
 --
 
 CREATE TABLE `schedules` (
@@ -651,7 +635,7 @@ CREATE TABLE `schedules` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `specializations`
+-- Cấu trúc bảng cho bảng `specializations`
 --
 
 CREATE TABLE `specializations` (
@@ -665,7 +649,7 @@ CREATE TABLE `specializations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `specializations`
+-- Đang đổ dữ liệu cho bảng `specializations`
 --
 
 INSERT INTO `specializations` (`id`, `name`, `image_url`, `description`, `image`, `created_at`, `updated_at`) VALUES
@@ -679,7 +663,7 @@ INSERT INTO `specializations` (`id`, `name`, `image_url`, `description`, `image`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Cấu trúc bảng cho bảng `users`
 --
 
 CREATE TABLE `users` (
@@ -701,7 +685,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `users`
+-- Đang đổ dữ liệu cho bảng `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `phone`, `address`, `email_verified_at`, `password`, `role`, `status`, `image`, `remember_token`, `created_at`, `updated_at`, `city_id`, `avatar`) VALUES
@@ -716,15 +700,14 @@ INSERT INTO `users` (`id`, `name`, `email`, `phone`, `address`, `email_verified_
 (15, 'Duy Khánh', 'bacsikhanh@mediconnect.com', '0123456789', 'Q3', NULL, '$2y$12$WiGFt93lQzVp0FHmZ.ENduYO0APaABX9Qwy8ISXUaOPgHsagZqDPK', 'doctor', 'active', 'avatars/2dNO03a8IEj58PWrwqOnyzg1bAAu8vguybQM9kZO.jpg', NULL, '2026-01-24 00:41:49', '2026-01-24 03:36:21', 2, NULL),
 (16, 'Khách 2', 'khach2@mediconnect.com', '0123456789', 'Q2', NULL, '$2y$12$Uo4Z8pIoAtqs1WcoKZvdzOcDuoRrrZ6v120QvVXV0ottGMCgCG3gu', 'patient', 'active', NULL, NULL, '2026-01-24 01:03:30', '2026-01-24 01:03:30', 2, NULL),
 (17, 'Khách 3', 'khach3@mediconnect.com', '0123456789', 'Q4', NULL, '$2y$12$i9CCHQcQuSx/rFh161S7S.d6H2.GEmh04da21OX.6n7R6wyM7eOGe', 'patient', 'active', NULL, NULL, '2026-01-24 05:17:38', '2026-01-24 05:17:38', 2, NULL),
-(18, 'Minh Hoàng', 'bacsihoang@mediconnect.com', '0123456789', 'Q1', NULL, '$2y$12$4XYeR0J9DjTtZpF9TE2n8u7NGQd6S12CmZTfbFdhaNhFAqFISIIZK', 'doctor', 'active', 'avatars/vRmPQy5uRcxLD9TQdjnnD9p3EGxLbbW6k831X18I.jpg', NULL, '2026-01-24 05:25:45', '2026-01-24 05:26:56', 2, NULL),
-(21, 'Trọng Hoàng', 'bacsihoang2702@mediconnect.com', '0123456789', 'A123', NULL, '$2y$12$o9mqW4J34KMngVyuwEnLreLxpru9RnvqHPmum1X9hZJZtZrQNlmNa', 'doctor', 'active', 'avatars/ggVKfRjVZMsifC0Fxp0wbNB6y8U7rwDYZJkW2UUB.jpg', NULL, '2026-01-26 19:58:53', '2026-01-26 20:01:30', 2, NULL);
+(18, 'Minh Hoàng', 'bacsihoang@mediconnect.com', '0123456789', 'Q1', NULL, '$2y$12$4XYeR0J9DjTtZpF9TE2n8u7NGQd6S12CmZTfbFdhaNhFAqFISIIZK', 'doctor', 'active', 'avatars/vRmPQy5uRcxLD9TQdjnnD9p3EGxLbbW6k831X18I.jpg', NULL, '2026-01-24 05:25:45', '2026-01-24 05:26:56', 2, NULL);
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `appointments`
+-- Chỉ mục cho bảng `appointments`
 --
 ALTER TABLE `appointments`
   ADD PRIMARY KEY (`id`),
@@ -735,38 +718,38 @@ ALTER TABLE `appointments`
   ADD KEY `appointments_doctor_id_status_index` (`doctor_id`,`status`);
 
 --
--- Indexes for table `cache`
+-- Chỉ mục cho bảng `cache`
 --
 ALTER TABLE `cache`
   ADD PRIMARY KEY (`key`);
 
 --
--- Indexes for table `cache_locks`
+-- Chỉ mục cho bảng `cache_locks`
 --
 ALTER TABLE `cache_locks`
   ADD PRIMARY KEY (`key`);
 
 --
--- Indexes for table `cities`
+-- Chỉ mục cho bảng `cities`
 --
 ALTER TABLE `cities`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `contact_messages`
+-- Chỉ mục cho bảng `contact_messages`
 --
 ALTER TABLE `contact_messages`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `doctor_availabilities`
+-- Chỉ mục cho bảng `doctor_availabilities`
 --
 ALTER TABLE `doctor_availabilities`
   ADD PRIMARY KEY (`id`),
   ADD KEY `doctor_availabilities_doctor_id_foreign` (`doctor_id`);
 
 --
--- Indexes for table `doctor_profiles`
+-- Chỉ mục cho bảng `doctor_profiles`
 --
 ALTER TABLE `doctor_profiles`
   ADD PRIMARY KEY (`id`),
@@ -775,14 +758,14 @@ ALTER TABLE `doctor_profiles`
   ADD KEY `doctor_profiles_user_id_index` (`user_id`);
 
 --
--- Indexes for table `failed_jobs`
+-- Chỉ mục cho bảng `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
 
 --
--- Indexes for table `feedbacks`
+-- Chỉ mục cho bảng `feedbacks`
 --
 ALTER TABLE `feedbacks`
   ADD PRIMARY KEY (`id`),
@@ -791,81 +774,81 @@ ALTER TABLE `feedbacks`
   ADD KEY `feedbacks_appointment_id_foreign` (`appointment_id`);
 
 --
--- Indexes for table `jobs`
+-- Chỉ mục cho bảng `jobs`
 --
 ALTER TABLE `jobs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `jobs_queue_index` (`queue`);
 
 --
--- Indexes for table `job_batches`
+-- Chỉ mục cho bảng `job_batches`
 --
 ALTER TABLE `job_batches`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `medical_content`
+-- Chỉ mục cho bảng `medical_content`
 --
 ALTER TABLE `medical_content`
   ADD PRIMARY KEY (`id`),
   ADD KEY `medical_content_author_id_foreign` (`author_id`);
 
 --
--- Indexes for table `medical_records`
+-- Chỉ mục cho bảng `medical_records`
 --
 ALTER TABLE `medical_records`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `medical_records_appointment_id_unique` (`appointment_id`);
 
 --
--- Indexes for table `migrations`
+-- Chỉ mục cho bảng `migrations`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `notifications`
+-- Chỉ mục cho bảng `notifications`
 --
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id`),
   ADD KEY `notifications_notifiable_type_notifiable_id_index` (`notifiable_type`,`notifiable_id`);
 
 --
--- Indexes for table `patients`
+-- Chỉ mục cho bảng `patients`
 --
 ALTER TABLE `patients`
   ADD PRIMARY KEY (`id`),
   ADD KEY `patients_user_id_foreign` (`user_id`);
 
 --
--- Indexes for table `patient_profiles`
+-- Chỉ mục cho bảng `patient_profiles`
 --
 ALTER TABLE `patient_profiles`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `patient_profiles_user_id_unique` (`user_id`);
 
 --
--- Indexes for table `posts`
+-- Chỉ mục cho bảng `posts`
 --
 ALTER TABLE `posts`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `posts_slug_unique` (`slug`);
 
 --
--- Indexes for table `schedules`
+-- Chỉ mục cho bảng `schedules`
 --
 ALTER TABLE `schedules`
   ADD PRIMARY KEY (`id`),
   ADD KEY `schedules_doctor_id_foreign` (`doctor_id`);
 
 --
--- Indexes for table `specializations`
+-- Chỉ mục cho bảng `specializations`
 --
 ALTER TABLE `specializations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users`
+-- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -874,117 +857,117 @@ ALTER TABLE `users`
   ADD KEY `users_role_index` (`role`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `appointments`
+-- AUTO_INCREMENT cho bảng `appointments`
 --
 ALTER TABLE `appointments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
--- AUTO_INCREMENT for table `cities`
+-- AUTO_INCREMENT cho bảng `cities`
 --
 ALTER TABLE `cities`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `contact_messages`
+-- AUTO_INCREMENT cho bảng `contact_messages`
 --
 ALTER TABLE `contact_messages`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `doctor_availabilities`
+-- AUTO_INCREMENT cho bảng `doctor_availabilities`
 --
 ALTER TABLE `doctor_availabilities`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
--- AUTO_INCREMENT for table `doctor_profiles`
+-- AUTO_INCREMENT cho bảng `doctor_profiles`
 --
 ALTER TABLE `doctor_profiles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `failed_jobs`
+-- AUTO_INCREMENT cho bảng `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `feedbacks`
+-- AUTO_INCREMENT cho bảng `feedbacks`
 --
 ALTER TABLE `feedbacks`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `jobs`
+-- AUTO_INCREMENT cho bảng `jobs`
 --
 ALTER TABLE `jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `medical_content`
+-- AUTO_INCREMENT cho bảng `medical_content`
 --
 ALTER TABLE `medical_content`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `medical_records`
+-- AUTO_INCREMENT cho bảng `medical_records`
 --
 ALTER TABLE `medical_records`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `migrations`
+-- AUTO_INCREMENT cho bảng `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
--- AUTO_INCREMENT for table `patients`
+-- AUTO_INCREMENT cho bảng `patients`
 --
 ALTER TABLE `patients`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `patient_profiles`
+-- AUTO_INCREMENT cho bảng `patient_profiles`
 --
 ALTER TABLE `patient_profiles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT for table `posts`
+-- AUTO_INCREMENT cho bảng `posts`
 --
 ALTER TABLE `posts`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `schedules`
+-- AUTO_INCREMENT cho bảng `schedules`
 --
 ALTER TABLE `schedules`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `specializations`
+-- AUTO_INCREMENT cho bảng `specializations`
 --
 ALTER TABLE `specializations`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `appointments`
+-- Các ràng buộc cho bảng `appointments`
 --
 ALTER TABLE `appointments`
   ADD CONSTRAINT `appointments_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
@@ -992,13 +975,13 @@ ALTER TABLE `appointments`
   ADD CONSTRAINT `appointments_patient_id_foreign` FOREIGN KEY (`patient_id`) REFERENCES `patient_profiles` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `doctor_availabilities`
+-- Các ràng buộc cho bảng `doctor_availabilities`
 --
 ALTER TABLE `doctor_availabilities`
   ADD CONSTRAINT `doctor_availabilities_doctor_id_foreign` FOREIGN KEY (`doctor_id`) REFERENCES `doctor_profiles` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `doctor_profiles`
+-- Các ràng buộc cho bảng `doctor_profiles`
 --
 ALTER TABLE `doctor_profiles`
   ADD CONSTRAINT `doctor_profiles_specialization_id_foreign` FOREIGN KEY (`specialization_id`) REFERENCES `specializations` (`id`) ON DELETE CASCADE,
@@ -1006,7 +989,7 @@ ALTER TABLE `doctor_profiles`
   ADD CONSTRAINT `doctors_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `feedbacks`
+-- Các ràng buộc cho bảng `feedbacks`
 --
 ALTER TABLE `feedbacks`
   ADD CONSTRAINT `feedbacks_appointment_id_foreign` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`id`),
@@ -1014,37 +997,37 @@ ALTER TABLE `feedbacks`
   ADD CONSTRAINT `feedbacks_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `medical_content`
+-- Các ràng buộc cho bảng `medical_content`
 --
 ALTER TABLE `medical_content`
   ADD CONSTRAINT `medical_content_author_id_foreign` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `medical_records`
+-- Các ràng buộc cho bảng `medical_records`
 --
 ALTER TABLE `medical_records`
   ADD CONSTRAINT `medical_records_appointment_id_foreign` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `patients`
+-- Các ràng buộc cho bảng `patients`
 --
 ALTER TABLE `patients`
   ADD CONSTRAINT `patients_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `patient_profiles`
+-- Các ràng buộc cho bảng `patient_profiles`
 --
 ALTER TABLE `patient_profiles`
   ADD CONSTRAINT `patient_profiles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `schedules`
+-- Các ràng buộc cho bảng `schedules`
 --
 ALTER TABLE `schedules`
   ADD CONSTRAINT `schedules_doctor_id_foreign` FOREIGN KEY (`doctor_id`) REFERENCES `doctor_profiles` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `users`
+-- Các ràng buộc cho bảng `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `users_city_id_foreign` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`);

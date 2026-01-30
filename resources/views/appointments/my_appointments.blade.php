@@ -1,6 +1,6 @@
 @extends('layouts.modern')
 
-@section('title', 'Appointment History - MediConnect')
+@section('title', 'Lịch sử khám bệnh - MediConnect')
 
 @section('content')
 <div class="container my-5">
@@ -9,14 +9,14 @@
             <h1 class="display-6 fw-bold text-primary mb-3">
                 <i class="bi bi-calendar-check me-3"></i>
                 @if(request('filter') == 'upcoming')
-                    {{ __('Upcoming Appointments') }}
+                    {{ __('Lịch hẹn sắp tới') }}
                 @elseif(request('filter') == 'history')
-                    {{ __('Appointment History') }}
+                    {{ __('Lịch sử khám bệnh') }}
                 @else
-                    {{ __('My Appointment History') }}
+                    {{ __('Lịch sử khám bệnh của tôi') }}
                 @endif
             </h1>
-            <p class="text-muted">{{ __('Track and manage your medical appointments') }}</p>
+            <p class="text-muted">{{ __('Theo dõi và quản lý các lịch hẹn khám bệnh') }}</p>
         </div>
     </div>
 
@@ -33,13 +33,13 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="bg-light text-secondary">
                         <tr>
-                            <th class="py-3 ps-4">{{ __('Time') }}</th>
-                            <th class="py-3">{{ __('Doctor & Specialty') }}</th>
-                            <th class="py-3">{{ __('Your Note') }}</th>
-                            <th class="py-3 text-center">{{ __('Fee') }}</th>
-                            <th class="py-3 text-center">{{ __('Payment') }}</th>
-                            <th class="py-3 text-center">{{ __('Status') }}</th>
-                            <th class="py-3 text-center">{{ __('Actions') }}</th>
+                            <th class="py-3 ps-4">{{ __('Thời gian') }}</th>
+                            <th class="py-3">{{ __('Bác sĩ & Chuyên khoa') }}</th>
+                            <th class="py-3">{{ __('Ghi chú của bạn') }}</th>
+                            <th class="py-3 text-center">{{ __('Phí khám') }}</th>
+                            <th class="py-3 text-center">{{ __('Thanh toán') }}</th>
+                            <th class="py-3 text-center">{{ __('Trạng thái') }}</th>
+                            <th class="py-3 text-center">{{ __('Thao tác') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,40 +51,35 @@
                             </td>
                             <td>
                                 <div class="fw-bold">{{ $appt->doctorProfile->user->name ?? 'N/A' }}</div>
-                                <span class="badge bg-info text-dark">{{ $appt->doctorProfile->specialization->name ?? __('General') }}</span>
+                                <span class="badge bg-info text-dark">{{ $appt->doctorProfile->specialization->name ?? __('Tổng quát') }}</span>
                             </td>
                             <td class="text-muted small">
-                                {{ Str::limit($appt->patient_note, 50) ?: __('No note') }}
+                                {{ Str::limit($appt->patient_note, 50) ?: __('Không có ghi chú') }}
                             </td>
                             <td class="text-center fw-bold text-success">
                                 {{ number_format($appt->fee, 2, '.', ',') }} USD
                             </td>
                             <td class="text-center">
                                 @if($appt->payment_status == 'paid')
-                                    <span class="badge bg-success">{{ __('Paid') }}</span>
+                                    <span class="badge bg-success">{{ __('Đã thanh toán') }}</span>
                                 @elseif($appt->payment_status == 'refunded')
-                                    <span class="badge bg-primary">{{ __('Refunded') }}</span>
+                                    <span class="badge bg-primary">{{ __('Đã hoàn tiền') }}</span>
                                 @elseif($appt->payment_status == 'forfeited')
-                                    <span class="badge bg-danger">{{ __('Fee Forfeited') }}</span>
+                                    <span class="badge bg-danger">{{ __('Mất phí hủy') }}</span>
                                 @else
-                                    <span class="badge bg-warning text-dark">{{ __('Pending Payment') }}</span>
+                                    <span class="badge bg-warning text-dark">{{ __('Chờ TT') }}</span>
                                 @endif
                             </td>
                             <td class="text-center">
                                 <x-appointment-status-badge :status="$appt->status" />
-                                @if($appt->status == 'cancelled' && $appt->cancellation_reason)
-                                    <div class="small text-danger mt-1 fst-italic">
-                                        {{ $appt->cancellation_reason }}
-                                    </div>
-                                @endif
                             </td>
                             <td class="text-center">
                                 @if($appt->status == 'completed' || $appt->status == 'Completed')
                                     @if($appt->feedback)
-                                        <span class="badge bg-secondary"><i class="bi bi-star-fill"></i> {{ __('Rated') }}</span>
+                                        <span class="badge bg-secondary"><i class="bi bi-star-fill"></i> {{ __('Đã đánh giá') }}</span>
                                     @else
                                         <a href="{{ route('feedback.create', $appt->id) }}" class="btn btn-sm btn-outline-warning">
-                                            <i class="bi bi-star"></i> {{ __('Rate') }}
+                                            <i class="bi bi-star"></i> {{ __('Đánh giá') }}
                                         </a>
                                     @endif
                                 @elseif(in_array($appt->status, ['pending', 'confirmed']))
@@ -92,8 +87,8 @@
                                         @csrf
                                         @method('POST')
                                         <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('{{ __('Are you sure you want to cancel this appointment?') }}')">
-                                            <i class="bi bi-x-circle"></i> {{ __('Cancel') }}
+                                                onclick="return confirm('{{ __('Bạn có chắc muốn hủy lịch hẹn này?') }}')">
+                                            <i class="bi bi-x-circle"></i> {{ __('Hủy lịch') }}
                                         </button>
                                     </form>
                                 @else
@@ -108,9 +103,9 @@
             @else
                 <div class="text-center py-5">
                     <i class="bi bi-calendar-x fs-1 text-muted mb-3"></i>
-                    <h5 class="text-muted mb-3">{{ __('You have no medical appointments.') }}</h5>
+                    <h5 class="text-muted mb-3">{{ __('Bạn chưa có lịch hẹn khám nào.') }}</h5>
                     <a href="{{ route('doctors.index') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                        <i class="bi bi-plus-lg me-2"></i>{{ __('Book Appointment Now') }}
+                        <i class="bi bi-plus-lg me-2"></i>{{ __('Đặt lịch khám ngay') }}
                     </a>
                 </div>
             @endif

@@ -1,19 +1,19 @@
 @extends('layouts.admin')
 
-@section('title', __('Appointment Management - Admin'))
+@section('title', __('Quản lý lịch hẹn - Admin'))
 
 @section('content')
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="h3 mb-0 text-gray-800">
-                <i class="fas fa-calendar-check me-2"></i>{{ __('Appointment Management') }}
+                <i class="fas fa-calendar-check me-2"></i>{{ __('Quản lý lịch hẹn') }}
             </h1>
-            <p class="text-muted">{{ __('Manage all appointments in the system') }}</p>
+            <p class="text-muted">{{ __('Quản lý tất cả lịch hẹn trong hệ thống') }}</p>
         </div>
     </div>
 
-    <!-- Statistics -->
+    <!-- Thống kê -->
     <div class="row mb-4">
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
@@ -21,7 +21,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                {{ __('Total Appointments') }}</div>
+                                {{ __('Tổng lịch hẹn') }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $appointments->total() }}</div>
                         </div>
                         <div class="col-auto">
@@ -38,7 +38,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                {{ __('Confirmed') }}</div>
+                                {{ __('Đã xác nhận') }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 {{ $appointments->where('status', 'confirmed')->count() }}
                             </div>
@@ -57,7 +57,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                {{ __('Pending Confirmation') }}</div>
+                                {{ __('Chờ xác nhận') }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 {{ $appointments->where('status', 'pending')->count() }}
                             </div>
@@ -76,7 +76,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                {{ __('Today') }}</div>
+                                {{ __('Hôm nay') }}</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 {{ $appointments->where('date', date('Y-m-d'))->count() }}
                             </div>
@@ -90,10 +90,13 @@
         </div>
     </div>
 
-    <!-- Appointment List -->
+    <!-- Danh sách lịch hẹn -->
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary">{{ __('Appointment List') }}</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('Danh sách lịch hẹn') }}</h6>
+            <a href="{{ route('admin.appointments.create') }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus me-1"></i>{{ __('Thêm lịch hẹn') }}
+            </a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -101,12 +104,12 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>{{ __('Patient') }}</th>
-                            <th>{{ __('Doctor') }}</th>
-                            <th>{{ __('Date Time') }}</th>
-                            <th>{{ __('Status') }}</th>
-                            <th>{{ __('Source') }}</th>
-
+                            <th>{{ __('Bệnh nhân') }}</th>
+                            <th>{{ __('Bác sĩ') }}</th>
+                            <th>{{ __('Ngày giờ') }}</th>
+                            <th>{{ __('Trạng thái') }}</th>
+                            <th>{{ __('Nguồn') }}</th>
+                            <th>{{ __('Thao tác') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,19 +130,13 @@
                             </td>
                             <td>
                                 @if($appointment->status == 'confirmed')
-                                    <span class="badge bg-success">{{ __('Confirmed') }}</span>
+                                    <span class="badge bg-success">{{ __('Đã xác nhận') }}</span>
                                 @elseif($appointment->status == 'pending')
-                                    <span class="badge bg-warning text-dark">{{ __('Pending Confirmation') }}</span>
+                                    <span class="badge bg-warning text-dark">{{ __('Chờ xác nhận') }}</span>
                                 @elseif($appointment->status == 'completed')
-                                    <span class="badge bg-info text-dark">{{ __('Completed') }}</span>
+                                    <span class="badge bg-info text-dark">{{ __('Đã hoàn thành') }}</span>
                                 @else
-                                    <span class="badge bg-danger mb-1">{{ __('Cancelled') }}</span>
-                                    @if($appointment->cancellation_reason)
-                                        <div class="small text-danger mt-1">
-                                            <i class="fas fa-info-circle me-1"></i>
-                                            {{ $appointment->cancellation_reason }}
-                                        </div>
-                                    @endif
+                                    <span class="badge bg-danger">{{ __('Đã hủy') }}</span>
                                 @endif
                             </td>
                             <td>
@@ -149,10 +146,21 @@
                                         <br><small class="text-muted">{{ $appointment->creator->name }}</small>
                                     @endif
                                 @else
-                                    <span class="badge bg-light text-dark border">{{ __('Patient') }}</span>
+                                    <span class="badge bg-light text-dark border">{{ __('Bệnh nhân') }}</span>
                                 @endif
                             </td>
-
+                            <td>
+                                <a href="{{ route('admin.appointments.edit', $appointment->id) }}" class="btn btn-sm btn-info text-white" title="{{ __('Chỉnh sửa') }}">
+                                    <i class="fas fa-edit me-1"></i> {{ __('Sửa') }}
+                                </a>
+                                <form action="{{ route('admin.appointments.destroy', $appointment->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('{{ __('Bạn có chắc muốn xóa?') }}')" title="{{ __('Xóa') }}">
+                                        <i class="fas fa-trash me-1"></i> {{ __('Xóa') }}
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

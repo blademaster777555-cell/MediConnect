@@ -21,13 +21,7 @@ class DoctorProfile extends Model
         'license_number', 
         'consultation_fee',
         'is_approved',
-        'certificate',
-        'rejection_reason'
-    ];
-
-    protected $casts = [
-        'is_approved' => 'boolean',
-        'certificate' => 'array',
+        'certificate'
     ];
 
     // Quan hệ với User (1 DoctorProfile thuộc về 1 User)

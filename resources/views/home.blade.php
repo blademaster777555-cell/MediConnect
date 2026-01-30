@@ -130,7 +130,7 @@
                     <div class="card-body">
                         <h5 class="card-title fw-bold">{{ $post->title }}</h5>
                         <p class="card-text text-muted">{{ Str::limit($post->summary, 80) }}</p>
-                        <a href="{{ route('posts.detail', $post->id) }}" class="btn btn-outline-danger btn-sm">{{ __('Đọc tiếp') }}</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm">{{ __('Đọc tiếp') }}</a>
                     </div>
                 </div>
             </div>
@@ -163,7 +163,7 @@
                                     <div class="card-body">
                                         <h6 class="card-title fw-bold">{{ $post->title }}</h6>
                                         <p class="card-text small text-muted">{{ Str::limit($post->summary, 60) }}</p>
-                                        <a href="{{ route('posts.detail', $post->id) }}" class="btn btn-sm btn-outline-success">{{ __('Đọc thêm') }}</a>
+                                        <a href="#" class="btn btn-sm btn-outline-success">{{ __('Đọc thêm') }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                             <div class="card-body">
                                 <h6 class="card-title fw-bold">{{ $post->title }}</h6>
                                 <p class="card-text small text-muted">{{ Str::limit($post->summary, 60) }}</p>
-                                <a href="{{ route('posts.detail', $post->id) }}" class="btn btn-sm btn-outline-info">{{ __('Xem chi tiết') }}</a>
+                                <a href="#" class="btn btn-sm btn-outline-info">{{ __('Xem chi tiết') }}</a>
                             </div>
                         </div>
                     </div>

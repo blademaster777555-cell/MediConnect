@@ -64,7 +64,7 @@ class DoctorController extends Controller
         
         // Generate next 7 days
         $days = [];
-        $startDate = \Carbon\Carbon::tomorrow();
+        $startDate = \Carbon\Carbon::today();
         for ($i = 0; $i < 7; $i++) {
             $date = $startDate->copy()->addDays($i);
             $days[$date->format('Y-m-d')] = $date->isoFormat('dddd (DD/MM)');
@@ -102,7 +102,7 @@ class DoctorController extends Controller
     {
         $doctor = $this->getDoctorProfile();
 
-        $validated = $request->validate([
+        $request->validate([
             'schedule' => 'required|array',
             'schedule.*.date' => 'required|date',
             'schedule.*.start_time' => 'required|date_format:H:i',
@@ -163,24 +163,16 @@ class DoctorController extends Controller
         $appointment = Appointment::where('doctor_id', $doctor->id)
             ->findOrFail($id);
 
-        $rules = [
+        $request->validate([
             'status' => 'required|in:pending,confirmed,cancelled,completed',
-        ];
+        ]);
 
+        $appointment->update(['status' => $request->status]);
+
+        // Doctor Cancel -> Refund logic
         if ($request->status == 'cancelled') {
-            $rules['cancellation_reason'] = 'required|string|max:500';
+            $appointment->update(['payment_status' => 'refunded']);
         }
-
-        $request->validate($rules);
-
-        $updateData = ['status' => $request->status];
-        
-        if ($request->status == 'cancelled') {
-            $updateData['cancellation_reason'] = $request->cancellation_reason;
-            $updateData['payment_status'] = 'refunded';
-        }
-
-        $appointment->update($updateData);
 
         return redirect()->back()->with('success', 'Appointment status updated successfully.');
     }
@@ -216,61 +208,5 @@ class DoctorController extends Controller
         $this->doctorService->updateProfile(Auth::user(), $request->validated());
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
-    }
-
-    /**
-     * Delete certificate image
-     */
-    public function deleteCertificate(Request $request)
-    {
-        $doctor = $this->getDoctorProfile();
-        $imagePath = $request->input('image');
-
-        if (!$imagePath) {
-             return redirect()->back()->withErrors(['error' => __('Không tìm thấy ảnh để xóa.')]);
-        }
-
-        $certs = $doctor->certificate ?? [];
-        if (!is_array($certs)) {
-             $certs = $certs ? [$certs] : [];
-        }
-
-        $normalizedInput = str_replace('\\', '/', $imagePath);
-        $newCerts = [];
-        $found = false;
-
-        foreach ($certs as $cert) {
-            $certPath = is_array($cert) ? ($cert['path'] ?? '') : $cert;
-            $normalizedCert = str_replace('\\', '/', $certPath);
-            
-            // Delete only the first occurrence
-            if (!$found && $normalizedCert === $normalizedInput) {
-                $found = true;
-                continue; 
-            }
-            
-            $newCerts[] = $cert;
-        }
-
-        if ($found) {
-            // If certificates remain, keep the current approval status.
-            // If no certificates remain, force unapprove.
-            $shouldKeepApproval = count($newCerts) > 0 && $doctor->is_approved;
-
-            $doctor->update([
-                'certificate' => array_values($newCerts),
-                'is_approved' => $shouldKeepApproval ? true : false,
-                'rejection_reason' => null
-            ]);
-            
-            // Optional: Delete physical file
-            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($imagePath);
-            }
-
-            return redirect()->back()->with('success', __('Đã xóa chứng chỉ thành công.'));
-        }
-
-        return redirect()->back()->with('error', __('Không tìm thấy chứng chỉ này trong hồ sơ của bạn.'));
     }
 }

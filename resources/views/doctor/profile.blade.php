@@ -34,14 +34,6 @@
                         </div>
                     @endif
 
-                    @if(Auth::user()->doctorProfile->rejection_reason && !Auth::user()->doctorProfile->is_approved)
-                        <div class="alert alert-danger mb-4">
-                            <h5><i class="bi bi-exclamation-triangle-fill me-2"></i>{{ __('Hồ sơ bị từ chối') }}</h5>
-                            <p class="mb-0">{{ Auth::user()->doctorProfile->rejection_reason }}</p>
-                            <small class="text-muted">{{ __('Vui lòng cập nhật lại thông tin hoặc bằng cấp để được duyệt lại.') }}</small>
-                        </div>
-                    @endif
-
                     <form action="{{ route('doctor.profile.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -115,57 +107,13 @@
 
                         <div class="mb-3">
                             <label for="certificate" class="form-label fw-bold">{{ __('Bằng cấp/Chứng chỉ') }}</label>
-                            <input type="file" class="form-control" id="certificate" name="certificate[]" accept="image/*" multiple>
-                            <small class="text-muted fst-italic">{{ __('Bạn có thể chọn nhiều ảnh cùng lúc.') }}</small>
-                            
-                            @if(!empty($doctor->certificate))
-                                <div class="mt-2 row g-2">
-                                    <p class="mb-1 text-muted small w-100">{{ __('Đã tải lên (Bấm icon thùng rác để xóa):') }}</p>
-                                    @php
-                                        $certs = $doctor->certificate ?? [];
-                                        if (is_string($certs)) {
-                                            $decoded = json_decode($certs, true);
-                                            $certs = is_array($decoded) ? $decoded : [$certs];
-                                        } 
-                                        if (!is_array($certs)) {
-                                            $certs = [$certs];
-                                        }
-
-                                        // Normalize
-                                        $displayCerts = [];
-                                        foreach ($certs as $cert) {
-                                            if (is_string($cert)) {
-                                                $displayCerts[] = ['path' => $cert, 'status' => 'pending']; 
-                                            } else {
-                                                $displayCerts[] = $cert;
-                                            }
-                                        }
-                                    @endphp
-
-                                    @foreach($displayCerts as $cert)
-                                        @if(empty($cert['path'])) @continue @endif
-                                        <div class="col-auto position-relative">
-                                            <a href="{{ asset('storage/' . $cert['path']) }}" target="_blank" class="d-inline-block border rounded p-1 {{ ($cert['status'] ?? '') == 'approved' ? 'border-success' : (($cert['status'] ?? '') == 'rejected' ? 'border-danger' : '') }}">
-                                                <img src="{{ asset('storage/' . $cert['path']) }}" alt="Certificate" height="80" class="d-block" onerror="this.style.display='none'">
-                                            </a>
-                                            
-                                            {{-- Status Badge --}}
-                                            @if(($cert['status'] ?? '') == 'approved')
-                                                <span class="badge bg-success position-absolute top-0 start-0 m-1" style="font-size: 0.6rem;">{{ __('Đã duyệt') }}</span>
-                                            @elseif(($cert['status'] ?? '') == 'rejected')
-                                                <span class="badge bg-danger position-absolute top-0 start-0 m-1" style="font-size: 0.6rem;">{{ __('Từ chối') }}</span>
-                                            @else
-                                                <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-1" style="font-size: 0.6rem;">{{ __('Chờ duyệt') }}</span>
-                                            @endif
-
-                                            <button type="button" class="btn btn-sm btn-danger rounded-circle p-0 d-flex justify-content-center align-items-center shadow-sm position-absolute top-0 end-0"
-                                                    style="width: 24px; height: 24px; transform: translate(30%, -30%); z-index: 10;"
-                                                    data-image="{{ $cert['path'] }}"
-                                                    onclick="deleteCertificate(this.getAttribute('data-image'))">
-                                                <i class="bi bi-trash-fill" style="font-size: 12px;"></i>
-                                            </button>
-                                        </div>
-                                    @endforeach
+                            <input type="file" class="form-control" id="certificate" name="certificate" accept="image/*">
+                            @if($doctor->certificate)
+                                <div class="mt-2">
+                                    <p class="mb-1 text-muted small">{{ __('Đã tải lên:') }}</p>
+                                    <a href="{{ asset('storage/' . $doctor->certificate) }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-file-earmark-image me-1"></i>{{ __('Xem bằng cấp') }}
+                                    </a>
                                 </div>
                             @endif
                         </div>
@@ -187,30 +135,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    function deleteCertificate(imagePath) {
-        if (confirm('{{ __("Bạn có chắc chắn muốn xóa chứng chỉ này?") }}')) {
-            let form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '{{ route("doctor.profile.certificate.delete") }}';
-            
-            let csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
-            form.appendChild(csrfToken);
-
-            let imageInput = document.createElement('input');
-            imageInput.type = 'hidden';
-            imageInput.name = 'image';
-            imageInput.value = imagePath;
-            form.appendChild(imageInput);
-
-            document.body.appendChild(form);
-            form.submit();
-        }
-    }
-</script>
-@endpush

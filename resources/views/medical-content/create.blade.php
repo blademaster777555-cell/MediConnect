@@ -45,8 +45,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="image" class="form-label font-weight-bold">Hình ảnh minh họa</label>
-                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    <label for="image" class="form-label font-weight-bold">Hình ảnh minh họa (URL)</label>
+                    <input type="text" class="form-control" id="image" name="image" value="{{ old('image') }}" placeholder="Nhập đường dẫn hình ảnh...">
                 </div>
 
                 <div class="mb-3">

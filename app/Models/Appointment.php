@@ -22,7 +22,6 @@ class Appointment extends Model
         'patient_note',
         'fee',
         'payment_status',
-        'cancellation_reason',
     ];
 
     // --- CÁC MỐI QUAN HỆ (RELATIONSHIPS) ---

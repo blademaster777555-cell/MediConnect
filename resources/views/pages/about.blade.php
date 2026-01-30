@@ -47,11 +47,9 @@
                 <div class="card-body text-center py-5">
                     <h3 class="fw-bold text-primary mb-3">{{ __('Sẵn sàng trải nghiệm MediConnect?') }}</h3>
                     <p class="text-muted mb-4">{{ __('Đặt lịch khám với bác sĩ ngay hôm nay để có sức khỏe tốt nhất.') }}</p>
-                    @if(!Auth::check() || Auth::user()->role !== 'doctor')
                     <a href="{{ route('doctors.index') }}" class="btn btn-primary btn-lg">
                         <i class="bi bi-search me-2"></i>{{ __('Tìm Bác sĩ ngay') }}
                     </a>
-                    @endif
                 </div>
             </div>
         </div>

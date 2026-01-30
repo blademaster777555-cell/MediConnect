@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'MediConnect - Medical Appointment Platform')</title>
+    <title>@yield('title', 'MediConnect - Nền tảng đặt lịch khám bệnh')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -70,49 +70,57 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">{{ __('Home') }}</a>
+                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">{{ __('Trang chủ') }}</a>
                     </li>
                     @if(Auth::check() && Auth::user()->role === 'admin')
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">{{ __('Overview') }}</a>
+                            <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">{{ __('Tổng quan') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}" href="{{ route('admin.doctors.index') }}">{{ __('Manage Doctors') }}</a>
+                            <a class="nav-link {{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}" href="{{ route('admin.doctors.index') }}">{{ __('QL Bác sĩ') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.patients.*') ? 'active' : '' }}" href="{{ route('admin.patients.index') }}">{{ __('Manage Patients') }}</a>
+                            <a class="nav-link {{ request()->routeIs('admin.patients.*') ? 'active' : '' }}" href="{{ route('admin.patients.index') }}">{{ __('QL Bệnh nhân') }}</a>
                         </li>
                          <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('medical-content.*') ? 'active' : '' }}" href="{{ route('medical-content.index') }}">{{ __('News & Diseases') }}</a>
+                            <a class="nav-link {{ request()->routeIs('medical-content.*') ? 'active' : '' }}" href="{{ route('medical-content.index') }}">{{ __('Tin tức & Bệnh') }}</a>
                         </li>
                          <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cities.*') ? 'active' : '' }}" href="{{ route('cities.index') }}">{{ __('Manage Cities') }}</a>
+                            <a class="nav-link {{ request()->routeIs('cities.*') ? 'active' : '' }}" href="{{ route('cities.index') }}">{{ __('QL Thành phố') }}</a>
                         </li>
                          <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.feedbacks.*') ? 'active' : '' }}" href="{{ route('admin.feedbacks.index') }}">{{ __('Feedback') }}</a>
+                            <a class="nav-link {{ request()->routeIs('admin.feedbacks.*') ? 'active' : '' }}" href="{{ route('admin.feedbacks.index') }}">{{ __('Phản hồi') }}</a>
                         </li>
                     @elseif(Auth::check() && Auth::user()->role === 'doctor')
                         {{-- Doctor links are now in the sidebar --}}
                     @else
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('doctors.index') ? 'active' : '' }}" href="{{ route('doctors.index') }}">{{ __('Find Doctors') }}</a>
+                            <a class="nav-link {{ request()->routeIs('doctors.index') ? 'active' : '' }}" href="{{ route('doctors.index') }}">{{ __('Tìm Bác sĩ') }}</a>
                         </li>
                     @endif
                     @if(!Auth::check() || Auth::user()->role !== 'admin')
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('news') ? 'active' : '' }}" href="{{ route('news') }}">{{ __('News') }}</a>
+                        <a class="nav-link {{ request()->routeIs('news') ? 'active' : '' }}" href="{{ route('news') }}">{{ __('Tin tức') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">{{ __('About') }}</a>
+                        <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">{{ __('Giới thiệu') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">{{ __('Contact') }}</a>
+                        <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">{{ __('Liên hệ') }}</a>
                     </li>
                     @endif
                 </ul>
 
                 <ul class="navbar-nav">
-
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-globe"></i> {{ session('locale', 'vi') == 'en' ? 'EN' : 'VI' }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('change_language', ['locale' => 'vi']) }}">Tiếng Việt</a></li>
+                            <li><a class="dropdown-item" href="{{ route('change_language', ['locale' => 'en']) }}">English</a></li>
+                        </ul>
+                    </li>
                     @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
@@ -123,13 +131,13 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a></li>
                                 @if(Auth::user()->role === 'doctor')
-                                    <li><a class="dropdown-item" href="{{ route('doctor.profile') }}">{{ __('Doctor Profile') }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Account Settings') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('doctor.profile') }}">{{ __('Hồ sơ Bác sĩ') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Cài đặt tài khoản') }}</a></li>
                                 @else
-                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('My Profile') }}</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Hồ sơ') }}</a></li>
                                 @endif
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">{{ __('Logout') }}</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">{{ __('Đăng xuất') }}</a></li>
                             </ul>
                         </li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -137,10 +145,10 @@
                         </form>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Đăng nhập') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-primary ms-2" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            <a class="btn btn-primary ms-2" href="{{ route('register') }}">{{ __('Đăng ký') }}</a>
                         </li>
                     @endauth
                 </ul>
@@ -159,7 +167,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-4">
                     <h5 class="fw-bold">MediConnect</h5>
-                    <p>{{ __('Leading online medical appointment platform in Vietnam. Connecting patients with specialist doctors quickly and conveniently.') }}</p>
+                    <p>{{ __('Nền tảng đặt lịch khám bệnh trực tuyến hàng đầu Việt Nam. Kết nối bệnh nhân với bác sĩ chuyên khoa một cách nhanh chóng và tiện lợi.') }}</p>
                     <div class="d-flex">
                         <a href="#" class="text-light me-3"><i class="bi bi-facebook fs-5"></i></a>
                         <a href="#" class="text-light me-3"><i class="bi bi-twitter fs-5"></i></a>
@@ -169,29 +177,29 @@
                 </div>
 
                 <div class="col-lg-2 mb-4">
-                    <h5 class="fw-bold">{{ __('Services') }}</h5>
+                    <h5 class="fw-bold">{{ __('Dịch vụ') }}</h5>
                     <ul class="list-unstyled">
                         @if(!Auth::check() || Auth::user()->role !== 'doctor')
-                        <li><a href="{{ route('doctors.index') }}">{{ __('Find Doctors') }}</a></li>
+                        <li><a href="{{ route('doctors.index') }}">{{ __('Tìm Bác sĩ') }}</a></li>
                         @endif
-                        <li><a href="{{ route('news') }}">{{ __('Medical News') }}</a></li>
-                        <li><a href="{{ route('about') }}">{{ __('About Us') }}</a></li>
-                        <li><a href="{{ route('contact') }}">{{ __('Contact') }}</a></li>
+                        <li><a href="{{ route('news') }}">{{ __('Tin tức Y tế') }}</a></li>
+                        <li><a href="{{ route('about') }}">{{ __('Giới thiệu') }}</a></li>
+                        <li><a href="{{ route('contact') }}">{{ __('Liên hệ') }}</a></li>
                     </ul>
                 </div>
 
                 <div class="col-lg-2 mb-4">
-                    <h5 class="fw-bold">{{ __('Support') }}</h5>
+                    <h5 class="fw-bold">{{ __('Hỗ trợ') }}</h5>
                     <ul class="list-unstyled">
                         <li><a href="#">{{ __('FAQ') }}</a></li>
-                        <li><a href="#">{{ __('Guide') }}</a></li>
-                        <li><a href="#">{{ __('Policy') }}</a></li>
-                        <li><a href="#">{{ __('Terms') }}</a></li>
+                        <li><a href="#">{{ __('Hướng dẫn') }}</a></li>
+                        <li><a href="#">{{ __('Chính sách') }}</a></li>
+                        <li><a href="#">{{ __('Điều khoản') }}</a></li>
                     </ul>
                 </div>
 
                 <div class="col-lg-4 mb-4">
-                    <h5 class="fw-bold">{{ __('Contact Us') }}</h5>
+                    <h5 class="fw-bold">{{ __('Liên hệ') }}</h5>
                     <p><i class="bi bi-geo-alt me-2"></i>{{ __('123 Đường ABC, Quận 1, TP.HCM') }}</p>
                     <p><i class="bi bi-telephone me-2"></i>(028) 1234 5678</p>
                     <p><i class="bi bi-envelope me-2"></i>contact@mediconnect.vn</p>
@@ -202,10 +210,10 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <p>&copy; 2025 MediConnect. {{ __('All rights reserved.') }}</p>
+                    <p>&copy; 2025 MediConnect. {{ __('Tất cả quyền được bảo lưu.') }}</p>
                 </div>
                 <div class="col-md-6 text-end">
-                    <p>{{ __('Designed by') }} <a href="#" class="text-primary">MediConnect Team</a></p>
+                    <p>{{ __('Thiết kế bởi') }} <a href="#" class="text-primary">MediConnect Team</a></p>
                 </div>
             </div>
         </div>

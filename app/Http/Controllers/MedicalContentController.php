@@ -33,9 +33,6 @@ class MedicalContentController extends Controller
     /**
      * Store a newly created medical content
      */
-    /**
-     * Store a newly created medical content
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -43,34 +40,11 @@ class MedicalContentController extends Controller
             'category' => 'required|string|max:100',
             'content' => 'required|string',
             'published_date' => 'nullable|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|string|max:255',
         ]);
 
         $validated['author_id'] = auth()->id();
         $validated['published_date'] = $validated['published_date'] ?? now();
-
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('medical-content', 'public');
-            // Check if we need to prepend 'storage/' or if the view uses asset('storage/...')
-            // Existing code in news.blade.php uses $article['image'] directly.
-            // If previous data was full URL, we should probably standardize.
-            // For now, let's store the full asset URL or relative path. 
-            // Most Laravel apps store relative path and use asset('storage/' . $path).
-            // BUT, the existing seeders might have 'http...' URLs.
-            // Let's store the relative path, and in the View, check if it starts with http.
-            // Actually, to be consistent with existing views that might expect full URL if previous data was manual URL:
-            // "https://via.placeholder.com..."
-            // I will store the relative path 'medical-content/filename.jpg'.
-            // The Views will need to be robust: if (Str::startsWith($image, 'http')) -> use as is, else -> asset('storage/'.$image).
-            $validated['image'] = 'storage/' . $path; // Storing with 'storage/' prefix to make it easier, OR just the path.
-            // Let's look at doctor-profile image logic. It uses asset('storage/' . $user->image).
-            // So if I save 'medical-content/xyz.jpg', I need to use asset('storage/'...) in view.
-            // BUT, if I save 'storage/medical-content/xyz.jpg', I can just use asset().
-            // Wait, existing seeders put full URLs. if I just save relative path, existing views might break if they don't use asset().
-            // Let's check news.blade.php: <img src="{{ $article['image'] ... }}">. It assumes the DB content IS the Source.
-            // So I should generate the full URL or at least the path starting with /storage/.
-            $validated['image'] = asset('storage/' . $path);
-        }
 
         MedicalContent::create($validated);
 
@@ -112,16 +86,8 @@ class MedicalContentController extends Controller
             'category' => 'required|string|max:100',
             'content' => 'required|string',
             'published_date' => 'nullable|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|string|max:255',
         ]);
-
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('medical-content', 'public');
-            $validated['image'] = asset('storage/' . $path);
-        } else {
-            // Keep old image if no new one uploaded
-            unset($validated['image']);
-        }
 
         $medicalContent->update($validated);
 
