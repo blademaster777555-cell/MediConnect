@@ -46,8 +46,15 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="image" class="form-label font-weight-bold">Hình ảnh minh họa (URL)</label>
-                    <input type="text" class="form-control" id="image" name="image" value="{{ old('image', $medicalContent->image) }}" placeholder="Nhập đường dẫn hình ảnh...">
+                    <label for="image" class="form-label font-weight-bold">Hình ảnh minh họa</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    @if($medicalContent->image)
+                        <div class="mt-2">
+                            <p class="mb-1 text-muted small">Ảnh hiện tại:</p>
+                            <img src="{{ $medicalContent->image }}" alt="Current Image" class="img-thumbnail" style="max-height: 150px;">
+                        </div>
+                    @endif
+                    <small class="text-muted">Để trống nếu không muốn thay đổi ảnh.</small>
                 </div>
 
                 <div class="mb-3">

@@ -37,6 +37,7 @@
                             <th>{{ __('Danh mục') }}</th>
                             <th>{{ __('Tác giả') }}</th>
                             <th>{{ __('Ngày đăng') }}</th>
+                            <th>{{ __('Hành động') }}</th>
 
                         </tr>
                     </thead>
@@ -57,7 +58,18 @@
                             <td>{{ $content->author->name ?? 'Admin' }}</td>
                             <td>{{ \Carbon\Carbon::parse($content->published_date)->format('d/m/Y') }}</td>
                             <td>
-
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('medical-content.edit', $content->id) }}" class="btn btn-sm btn-info text-white">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <form action="{{ route('medical-content.destroy', $content->id) }}" method="POST" onsubmit="return confirmDelete(event, this);">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty

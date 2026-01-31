@@ -12,10 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         
-        // --- WEB MIDDLEWARE ---
-        $middleware->web(append: [
-            \App\Http\Middleware\SetLocale::class,
-        ]);
+
 
         // --- PHÂN QUYỀN THEO ROLE ---
         $middleware->alias([

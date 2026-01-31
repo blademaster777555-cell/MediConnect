@@ -59,11 +59,184 @@ class AdminController extends Controller
         }
 
         if ($user->doctorProfile) {
-            $user->doctorProfile->update(['is_approved' => true]);
+            $user->doctorProfile->update([
+                'is_approved' => true,
+                'rejection_reason' => null
+            ]);
             return redirect()->back()->with('success', __('Đã duyệt tài khoản bác sĩ') . ' ' . $user->name);
         }
 
         return redirect()->back()->with('error', __('Bác sĩ này chưa cập nhật hồ sơ, không thể duyệt!'));
+    }
+
+    public function rejectDoctor(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        
+        if ($user->role !== User::ROLE_DOCTOR) {
+            return redirect()->back()->with('error', __('Tài khoản này không phải là bác sĩ!'));
+        }
+
+        $request->validate([
+            'reason' => 'required|string|max:1000',
+        ]);
+
+        if ($user->doctorProfile) {
+            // Update certificates: Mark all non-approved (pending) certificates as rejected
+            $certs = $user->doctorProfile->certificate ?? [];
+            if (is_string($certs)) {
+                 $decoded = json_decode($certs, true);
+                 $certs = is_array($decoded) ? $decoded : [$certs];
+            } 
+            if (!is_array($certs)) {
+                 $certs = $certs ? [$certs] : [];
+            }
+    
+            $updatedCerts = [];
+            foreach ($certs as $cert) {
+                // Normalize
+                if (is_string($cert)) {
+                    $cert = ['path' => $cert, 'status' => 'pending'];
+                }
+                
+                // If already approved, keep it approved. Otherwise mark as rejected.
+                if (($cert['status'] ?? 'pending') !== 'approved') {
+                    $cert['status'] = 'rejected';
+                }
+                $updatedCerts[] = $cert;
+            }
+
+            $user->doctorProfile->update([
+                'certificate' => $updatedCerts,
+                'is_approved' => false,
+                'rejection_reason' => $request->reason
+            ]);
+            return redirect()->back()->with('success', __('Đã từ chối duyệt bác sĩ. Lý do đã được gửi.'));
+        }
+
+        return redirect()->back()->with('error', __('Hồ sơ không tồn tại!'));
+    }
+
+    public function approveCertificates(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        
+        if ($user->role !== User::ROLE_DOCTOR) {
+            return redirect()->back()->with('error', __('Tài khoản này không phải là bác sĩ!'));
+        }
+
+        $request->validate([
+            'selected_certificates' => 'required|array',
+        ]);
+
+        if ($user->doctorProfile) {
+            $currentCerts = $user->doctorProfile->certificate ?? [];
+            if (is_string($currentCerts)) {
+                $currentCerts = json_decode($currentCerts, true) ?? [];
+            }
+            if (!is_array($currentCerts)) {
+                $currentCerts = [$currentCerts];
+            }
+
+            // Normalize
+            $normalizedCerts = [];
+            foreach ($currentCerts as $cert) {
+                if (is_string($cert)) {
+                    $normalizedCerts[] = ['path' => $cert, 'status' => 'pending'];
+                } else {
+                    $normalizedCerts[] = $cert;
+                }
+            }
+
+            $selectedPaths = $request->selected_certificates;
+            $updatedCerts = [];
+            $approvedCount = 0;
+
+            foreach ($normalizedCerts as $cert) {
+                // If this cert is in the selected list, mark it approved
+                if (in_array($cert['path'], $selectedPaths)) {
+                    $cert['status'] = 'approved';
+                }
+                
+                // Count how many are approved total
+                if (($cert['status'] ?? 'pending') === 'approved') {
+                    $approvedCount++;
+                }
+
+                $updatedCerts[] = $cert;
+            }
+
+            // If at least one cert is approved, we can approve the profile?
+            // Or only if ALL are approved?
+            // User requirement: "Approve Selected". Likely means "If I approve *these*, accept the profile."
+            
+            $user->doctorProfile->update([
+                'certificate' => $updatedCerts,
+                'is_approved' => ($approvedCount > 0), // Approve profile if at least one cert is approved
+                'rejection_reason' => null
+            ]);
+
+            return redirect()->back()->with('success', __('Đã duyệt các chứng chỉ đã chọn.'));
+        }
+
+        return redirect()->back()->with('error', __('Hồ sơ không tồn tại!'));
+    }
+
+    public function rejectCertificates(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        
+        if ($user->role !== User::ROLE_DOCTOR) {
+            return redirect()->back()->with('error', __('Tài khoản này không phải là bác sĩ!'));
+        }
+
+        $request->validate([
+            'selected_certificates' => 'required|array',
+            'reason' => 'required|string',
+        ]);
+
+        if ($user->doctorProfile) {
+            $currentCerts = $user->doctorProfile->certificate ?? [];
+            if (is_string($currentCerts)) {
+                $currentCerts = json_decode($currentCerts, true) ?? [];
+            }
+            if (!is_array($currentCerts)) {
+                $currentCerts = [$currentCerts];
+            }
+
+            // Normalize
+            $normalizedCerts = [];
+            foreach ($currentCerts as $cert) {
+                if (is_string($cert)) {
+                    $normalizedCerts[] = ['path' => $cert, 'status' => 'pending'];
+                } else {
+                    $normalizedCerts[] = $cert;
+                }
+            }
+
+            $selectedPaths = $request->selected_certificates;
+            $updatedCerts = [];
+
+            foreach ($normalizedCerts as $cert) {
+                // If this cert is in the selected list, mark it rejected
+                if (in_array($cert['path'], $selectedPaths)) {
+                    $cert['status'] = 'rejected';
+                }
+                $updatedCerts[] = $cert;
+            }
+
+            $user->doctorProfile->update([
+                'certificate' => $updatedCerts,
+                // Do NOT unapprove the profile here? Or should we?
+                // If all certs are rejected, maybe. But for now, just mark certs as rejected.
+                // 'is_approved' => false, 
+                // 'rejection_reason' => $request->reason // Keep global reason? Or per cert? This updates global.
+            ]);
+
+            return redirect()->back()->with('success', __('Đã từ chối các chứng chỉ đã chọn.'));
+        }
+
+        return redirect()->back()->with('error', __('Hồ sơ không tồn tại!'));
     }
 
     // Manage Doctor Schedule (Admin)
@@ -203,7 +376,16 @@ class AdminController extends Controller
         return redirect()->route('users.index')->with('success', __('Thêm người dùng thành công!'));
     }
 
-    // 5. FORM CHỈNH SỬA USER
+    // 5. HIỂN THỊ CHI TIẾT USER (READ-ONLY)
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        $cities = City::all();
+        $specializations = Specialization::all();
+        return view('admin.user.show', compact('user', 'cities', 'specializations'));
+    }
+
+    // 6. FORM CHỈNH SỬA USER (Original 5)
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -269,10 +451,54 @@ class AdminController extends Controller
     }
 
     // 7. XÓA USER
+    // 7. XÓA USER
     public function destroy($id)
     {
-        User::destroy($id);
-        return redirect()->route('users.index')->with('success', __('Đã xóa người dùng!'));
+        $user = User::findOrFail($id);
+
+        // Cleanup related data based on role
+        if ($user->role === User::ROLE_DOCTOR) {
+            if ($user->doctorProfile) {
+                // Delete appointments where this doctor is assigned
+                $appointments = \App\Models\Appointment::where('doctor_id', $user->doctorProfile->id)->get();
+                foreach ($appointments as $appointment) {
+                    // Delete feedbacks related to this appointment
+                    \App\Models\Feedback::where('appointment_id', $appointment->id)->delete();
+                    
+                    // Delete medical records related to this appointment (if any)
+                    \App\Models\MedicalRecord::where('appointment_id', $appointment->id)->delete();
+                    
+                    // Delete the appointment
+                    $appointment->delete();
+                }
+                
+
+                
+                // Delete Doctor Profile
+                $user->doctorProfile->delete();
+            }
+        } elseif ($user->role === User::ROLE_PATIENT) {
+            if ($user->patientProfile) {
+                 // Delete appointments where this patient is assigned
+                 $appointments = \App\Models\Appointment::where('patient_id', $user->id)->get();
+                 foreach ($appointments as $appointment) {
+                     // Delete feedbacks related to this appointment
+                     \App\Models\Feedback::where('appointment_id', $appointment->id)->delete();
+                     
+                     // Delete medical records related to this appointment
+                     \App\Models\MedicalRecord::where('appointment_id', $appointment->id)->delete();
+ 
+                     // Delete the appointment
+                     $appointment->delete();
+                 }
+                $user->patientProfile->delete();
+            }
+        }
+
+        // Final User Delete
+        $user->delete();
+
+        return redirect()->back()->with('success', __('Đã xóa người dùng thành công!'));
     }
 
     // 8. QUẢN LÝ LỊCH HẸN (Admin)

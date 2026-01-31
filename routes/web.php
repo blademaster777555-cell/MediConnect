@@ -73,6 +73,7 @@ Route::middleware(['auth', 'verified'])->prefix('doctor')->group(function () {
     // 2.0 Manage Profile
     Route::get('/profile', [DoctorController::class, 'profile'])->name('doctor.profile');
     Route::put('/profile', [DoctorController::class, 'updateProfile'])->name('doctor.profile.update');
+    Route::post('/profile/certificate/delete', [DoctorController::class, 'deleteCertificate'])->name('doctor.profile.certificate.delete');
     
     // 3.0 Manage Availability: Set available time slots
     Route::get('/schedule', [DoctorController::class, 'schedule'])->name('doctor.schedule');
@@ -112,6 +113,9 @@ Route::middleware(['auth', 'verified', 'is_admin'])->prefix('admin')->group(func
     Route::get('/doctors', [AdminController::class, 'doctors'])->name('admin.doctors.index');
     Route::get('/patients', [AdminController::class, 'patients'])->name('admin.patients.index');
     Route::post('/doctors/{id}/approve', [AdminController::class, 'approveDoctor'])->name('admin.doctors.approve');
+    Route::post('/doctors/{id}/reject', [AdminController::class, 'rejectDoctor'])->name('admin.doctors.reject');
+    Route::post('/doctors/{id}/certificates/reject', [AdminController::class, 'rejectCertificates'])->name('admin.doctors.certificates.reject');
+    Route::post('/doctors/{id}/certificates/approve', [AdminController::class, 'approveCertificates'])->name('admin.doctors.certificates.approve');
     
     // Manage Doctor Schedule
     Route::get('/doctors/{id}/schedule', [AdminController::class, 'doctorSchedule'])->name('admin.doctors.schedule');
@@ -167,11 +171,6 @@ Route::prefix('api')->group(function () {
     Route::middleware('auth')->get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('api.notifications.unread-count');
 });
 
-Route::get('lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'vi'])) {
-        session(['locale' => $locale]);
-    }
-    return redirect()->back();
-})->name('change_language');
+
 
 require __DIR__.'/auth.php';

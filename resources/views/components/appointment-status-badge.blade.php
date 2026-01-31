@@ -11,10 +11,10 @@
     };
     
     $labels = [
-        'pending' => __('Chờ xác nhận'),
-        'confirmed' => __('Đã xác nhận'),
-        'completed' => __('Đã hoàn thành'),
-        'cancelled' => __('Đã hủy'),
+        'pending' => __('Pending'),
+        'confirmed' => __('Confirmed'),
+        'completed' => __('Completed'),
+        'cancelled' => __('Cancelled'),
     ];
     
     $label = $labels[$status] ?? ucfirst($status);

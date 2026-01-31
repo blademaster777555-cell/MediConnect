@@ -17,13 +17,10 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Session::has('locale')) {
-            App::setLocale(Session::get('locale'));
-        } else {
-            // Default to config or detect browser? For now default to 'vi' explicitly if needed, but config('app.locale') handles default.
-            // Let's set default session to 'vi' if not present for consistency
-            Session::put('locale', config('app.locale', 'vi'));
-        }
+        // Locale switching disabled. App uses default config 'en'.
+        // if (Session::has('locale')) {
+        //     App::setLocale(Session::get('locale'));
+        // }
 
         return $next($request);
     }
