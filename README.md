@@ -78,8 +78,8 @@ When logged in as an admin, the user will start at the homepage.
 3. The user can view the number of doctors, patients and number of appointments.
 4. In the admin dashboard, the user can perform 4 quick action. "Add User" tab for adding new account, "Manage Appointments" tab to view and edit all appointments in the system, "User List" tab to view and delete account, "Manage Specializations" tab to add, edit or delete the system's medical specialization in the specialization list.
 5. In the "Add User" page, the user can create new account using full name, login email, password, phone number, location and role
-6. In the "Manage Doctor" page, the user can view and edit the doctor schedule and their profile. The user can also view and delete doctor account.
-7. In the "Manage Patient" page, the user can view and edit patient profile. The user can also view and delete patient account.
+6. In the "Manage Doctor" page, the user can view the doctor schedule and their profile. The user can also view and delete doctor account.
+7. In the "Manage Patient" page, the user can view patient profile. The user can also view and delete patient account.
 8. In the "News and Diseases" page, the user can view and create new post and post them on the medical news page.
 9. In the "Manage Cities" page, the user can view, edit, create and delete the name of cities that were registered in the system.
 10. In the "Feedback" page, the user can view and delete the patient's comment about their doctor on their appointment.
@@ -97,11 +97,9 @@ Doctors can create account, but patients can only book with the newly registered
 
 ## Demo Accounts:
 
- * Patient: khack1@mediconnect.com
+* Patient: khack1@mediconnect.com
+* Doctor:bacsiquang@mediconnect.com
+* Admin:admin@mediconnect.com
 
- * Doctor:bacsiquang@mediconnect.com
-
- * Admin:admin@mediconnect.com
-
- Password for all demo account: 12345678
+Password for all demo account: 12345678
 
