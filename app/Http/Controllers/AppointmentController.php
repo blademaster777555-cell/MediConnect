@@ -29,10 +29,20 @@ class AppointmentController extends Controller
         // Notify Admins
         $admins = \App\Models\User::where('role', \App\Models\User::ROLE_ADMIN)->get();
         foreach ($admins as $admin) {
-            $admin->notify(new \App\Notifications\NewAppointmentCreated($appointment));
+            // Check if NewAppointmentCreated exists, if not use generic
+            if (class_exists('App\Notifications\NewAppointmentCreated')) {
+                 $admin->notify(new \App\Notifications\NewAppointmentCreated($appointment));
+            } else {
+                 $admin->notify(new \App\Notifications\AppointmentNotification($appointment, 'new_booking'));
+            }
         }
 
-        return redirect()->route('dashboard')->with('success', 'Đặt lịch thành công!');
+        // Notify Doctor
+        if ($appointment->doctorProfile && $appointment->doctorProfile->user) {
+            $appointment->doctorProfile->user->notify(new \App\Notifications\AppointmentNotification($appointment, 'new_booking'));
+        }
+
+        return redirect()->route('dashboard')->with('success', __('Appointment booked successfully!'));
     }
 
     /**
@@ -46,17 +56,17 @@ class AppointmentController extends Controller
         // Security check: Only the patient or admin can cancel
         if ($user->role !== \App\Models\User::ROLE_ADMIN && 
            (!$user->patientProfile || $appointment->patient_id !== $user->patientProfile->id)) {
-            return redirect()->back()->with('error', 'Bạn không có quyền hủy lịch hẹn này!');
+            return redirect()->back()->with('error', __('You do not have permission to cancel this appointment!'));
         }
 
         if (in_array(strtolower($appointment->status), ['completed', 'cancelled'])) {
-            return redirect()->back()->with('error', 'Không thể hủy lịch hẹn đã hoàn thành hoặc đã hủy!');
+            return redirect()->back()->with('error', __('Cannot cancel completed or already cancelled appointments!'));
         }
 
         // Patient cancel -> Forfeit fee (no refund)
         $this->appointmentService->cancel($appointment, false);
 
-        return redirect()->back()->with('success', 'Đã hủy lịch hẹn thành công!');
+        return redirect()->back()->with('success', __('Appointment cancelled successfully!'));
     }
 
     /**
@@ -103,12 +113,12 @@ class AppointmentController extends Controller
             ->exists();
 
         if ($exists) {
-            return redirect()->back()->with('error', 'Khung giờ này đã có người đặt!');
+            return redirect()->back()->with('error', __('This time slot is already booked!'));
         }
 
         Appointment::create(array_merge($data, ['status' => 'confirmed']));
 
-        return redirect()->route('admin.appointments')->with('success', 'Tạo lịch hẹn thành công!');
+        return redirect()->route('admin.appointments')->with('success', __('Appointment created successfully!'));
     }
 
     public function edit($id)
@@ -135,7 +145,7 @@ class AppointmentController extends Controller
 
         $appointment->update($data);
 
-        return redirect()->route('admin.appointments')->with('success', 'Cập nhật lịch hẹn thành công!');
+        return redirect()->route('admin.appointments')->with('success', __('Appointment updated successfully!'));
     }
 
     public function destroy($id)
@@ -143,7 +153,7 @@ class AppointmentController extends Controller
         $appointment = Appointment::findOrFail($id);
         $appointment->delete();
 
-        return redirect()->route('admin.appointments')->with('success', 'Đã xóa lịch hẹn!');
+        return redirect()->route('admin.appointments')->with('success', __('Appointment deleted successfully!'));
     }
 
     /**
@@ -154,7 +164,7 @@ class AppointmentController extends Controller
         $user = Auth::user();
         $patient = $user->patientProfile ?: PatientProfile::create(['user_id' => $user->id]);
 
-        $query = Appointment::with(['doctorProfile.user', 'doctorProfile.specialization'])
+        $query = Appointment::with(['doctorProfile.user', 'doctorProfile.specialization', 'medicalRecord'])
             ->where('patient_id', $patient->id);
 
         if ($request->get('filter') == 'upcoming') {

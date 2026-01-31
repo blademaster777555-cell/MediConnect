@@ -119,7 +119,7 @@
                             </td>
                             <td>
                                 <strong>{{ $appointment->doctorProfile->user->name ?? 'Unknown' }}</strong><br>
-                                <small class="text-muted">{{ $appointment->doctorProfile->specialization->name ?? 'Đa khoa' }}</small>
+                                <small class="text-muted">{{ $appointment->doctorProfile->specialization->name ?? __('General') }}</small>
                             </td>
                             <td>
                                 {{ \Carbon\Carbon::parse($appointment->date)->format('d/m/Y') }}<br>

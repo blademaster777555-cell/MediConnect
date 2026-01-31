@@ -153,6 +153,6 @@ class HomeController extends Controller
             'message' => $request->message,
         ]);
 
-        return redirect()->back()->with('success', 'Thank you for contacting us! We will respond soon.');
+        return redirect()->back()->with('success', __('Thank you for contacting us! We will respond soon.'));
     }
 }

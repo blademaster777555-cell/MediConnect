@@ -17,6 +17,7 @@ class MedicalContent extends Model
         'content',
         'author_id',
         'published_date',
+        'image',
     ];
 
     protected $casts = [

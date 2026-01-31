@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>{{ __('Quản lý Bệnh nhân') }}</h2>
+    <h2>{{ __('Patient Management') }}</h2>
 </div>
 
 <div class="card shadow-sm">
@@ -11,11 +11,11 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>{{ __('Tên') }}</th>
+                    <th>{{ __('Name') }}</th>
                     <th>{{ __('Email') }}</th>
-                    <th>{{ __('Số điện thoại') }}</th>
-                    <th>{{ __('Ngày tham gia') }}</th>
-                    <th>{{ __('Hành động') }}</th>
+                    <th>{{ __('Phone Number') }}</th>
+                    <th>{{ __('Joined Date') }}</th>
+                    <th>{{ __('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,14 +31,14 @@
                     <td>
                         <div class="d-flex gap-2">
                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-info text-white">
-                                <i class="bi bi-eye"></i> {{ __('Xem') }}
+                                <i class="bi bi-eye"></i> {{ __('View') }}
                             </a>
 
-                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirmDelete(event, this);">
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirmAction(event, '{{ __('Are you sure you want to delete?') }}');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash"></i> {{ __('Xóa') }}
+                                    <i class="bi bi-trash"></i> {{ __('Delete') }}
                                 </button>
                             </form>
                         </div>

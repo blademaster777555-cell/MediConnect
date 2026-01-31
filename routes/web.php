@@ -148,7 +148,8 @@ Route::middleware(['auth', 'verified', 'is_admin'])->prefix('admin')->group(func
     Route::delete('/contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('admin.contact-messages.destroy');
     
     // Admin Notifications
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
+    // Admin Notifications - Moved to global scope
+    // Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
     
     // Medical Records (Admin view all)
     Route::get('/medical-records', [MedicalRecordController::class, 'index'])->name('admin.medical-records.index');
@@ -168,9 +169,21 @@ Route::prefix('api')->group(function () {
     Route::get('/doctor-availability', [DataController::class, 'getDoctorAvailability'])->name('api.doctor-availability');
     
     // Notifications API (Authenticated)
-    Route::middleware('auth')->get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('api.notifications.unread-count');
+    // Notifications API (Authenticated)
+    Route::middleware('auth')->group(function () {
+        Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('api.notifications.unread-count');
+        Route::get('/notifications/latest', [NotificationController::class, 'getLatest'])->name('api.notifications.latest');
+    });
 });
 
 
 
 require __DIR__.'/auth.php';
+
+// Global Notifications Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::post('/notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
+    Route::delete('/notifications/{id}', [App\Http\Controllers\NotificationController::class, 'destroy'])->name('notifications.destroy');
+});

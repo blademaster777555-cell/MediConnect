@@ -99,6 +99,11 @@
                                             @else
                                                 <span class="text-muted small">-</span>
                                             @endif
+                                            
+                                            <button type="button" class="btn btn-sm btn-outline-secondary" title="{{ __('Edit') }}"
+                                                    onclick="openEditModal('{{ route('doctor.appointment.status', $appt->id) }}', '{{ $appt->status }}', '{{ addslashes($appt->patient_note) }}')">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -145,11 +150,77 @@
             </form>
         </div>
     </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editForm" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('Edit Appointment') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit_status" class="form-label">{{ __('Status') }}</label>
+                        <select class="form-select" id="edit_status" name="status" onchange="toggleReasonField()">
+                            <option value="pending">{{ __('Pending') }}</option>
+                            <option value="confirmed">{{ __('Confirmed') }}</option>
+                            <option value="completed">{{ __('Completed') }}</option>
+                            <option value="cancelled">{{ __('Cancelled') }}</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3 d-none" id="cancellation_reason_container">
+                        <label for="edit_cancellation_reason" class="form-label">{{ __('Cancellation Reason') }} <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="edit_cancellation_reason" name="cancellation_reason" rows="2" placeholder="{{ __('Enter cancellation reason...') }}"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="patient_note" class="form-label">{{ __('Note') }}</label>
+                        <textarea class="form-control" id="patient_note" name="patient_note" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Close') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Save Changes') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script>
     function setCancelUrl(url) {
         document.getElementById('cancelForm').action = url;
+    }
+
+    function openEditModal(url, status, note) {
+        document.getElementById('editForm').action = url;
+        document.getElementById('edit_status').value = status;
+        document.getElementById('patient_note').value = note; // Note: note contains escaped quotes from addslashes
+        
+        toggleReasonField();
+        
+        var myModal = new bootstrap.Modal(document.getElementById('editModal'));
+        myModal.show();
+    }
+
+    function toggleReasonField() {
+        var status = document.getElementById('edit_status').value;
+        var container = document.getElementById('cancellation_reason_container');
+        var input = document.getElementById('edit_cancellation_reason');
+        
+        if (status === 'cancelled') {
+            container.classList.remove('d-none');
+            input.setAttribute('required', 'required');
+        } else {
+            container.classList.add('d-none');
+            input.removeAttribute('required');
+        }
     }
 </script>
 @endsection

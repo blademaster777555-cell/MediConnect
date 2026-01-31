@@ -69,7 +69,7 @@ class MedicalContentController extends Controller
             // Wait, existing seeders put full URLs. if I just save relative path, existing views might break if they don't use asset().
             // Let's check news.blade.php: <img src="{{ $article['image'] ... }}">. It assumes the DB content IS the Source.
             // So I should generate the full URL or at least the path starting with /storage/.
-            $validated['image'] = asset('storage/' . $path);
+            $validated['image'] = 'storage/' . $path;
         }
 
         MedicalContent::create($validated);
@@ -117,7 +117,7 @@ class MedicalContentController extends Controller
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('medical-content', 'public');
-            $validated['image'] = asset('storage/' . $path);
+            $validated['image'] = 'storage/' . $path;
         } else {
             // Keep old image if no new one uploaded
             unset($validated['image']);

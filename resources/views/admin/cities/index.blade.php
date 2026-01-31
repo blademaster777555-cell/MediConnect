@@ -4,15 +4,15 @@
 <div class="row">
     <div class="col-md-4">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">{{ __('Thêm Thành Phố') }}</div>
+            <div class="card-header bg-primary text-white">{{ __('Add City') }}</div>
             <div class="card-body">
                 <form action="{{ route('cities.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label>{{ __('Tên thành phố') }}</label>
-                        <input type="text" name="name" class="form-control" required placeholder="{{ __('VD: Cần Thơ') }}">
+                        <label>{{ __('City Name') }}</label>
+                        <input type="text" name="name" class="form-control" required placeholder="{{ __('Ex: Hanoi') }}">
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">{{ __('Lưu lại') }}</button>
+                    <button type="submit" class="btn btn-primary w-100">{{ __('Save') }}</button>
                 </form>
             </div>
         </div>
@@ -20,14 +20,14 @@
 
     <div class="col-md-8">
         <div class="card shadow-sm">
-            <div class="card-header">{{ __('Danh sách Thành phố') }}</div>
+            <div class="card-header">{{ __('City List') }}</div>
             <div class="card-body">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>{{ __('Tên') }}</th>
-                            <th>{{ __('Hành động') }}</th>
+                            <th>{{ __('Name') }}</th>
+                            <th>{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,11 +37,11 @@
                             <td>{{ $city->name }}</td>
                             <td>
                                 <a href="{{ route('cities.edit', $city->id) }}" class="btn btn-sm btn-warning me-1">
-                                    <i class="bi bi-pencil"></i> {{ __('Sửa') }}
+                                    <i class="bi bi-pencil"></i> {{ __('Edit') }}
                                 </a>
-                                <form action="{{ route('cities.destroy', $city->id) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('Xóa thành phố này?') }}');">
+                                <form action="{{ route('cities.destroy', $city->id) }}" method="POST" class="d-inline" onsubmit="return confirmAction(event, '{{ __('Delete this city?') }}');">
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> {{ __('Xóa') }}</button>
+                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> {{ __('Delete') }}</button>
                                 </form>
                             </td>
                         </tr>

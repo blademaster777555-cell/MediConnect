@@ -1,6 +1,6 @@
 @extends('layouts.modern')
 
-@section('title', __('Hồ sơ Bác sĩ') . ' - MediConnect')
+@section('title', __('Doctor Profile') . ' - MediConnect')
 
 @section('content')
 <div class="container my-5">
@@ -14,7 +14,7 @@
             <div class="card card-shadow">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">
-                        <i class="bi bi-person-lines-fill me-2"></i>{{ __('Cập nhật hồ sơ') }}
+                        <i class="bi bi-person-lines-fill me-2"></i>{{ __('Update Profile') }}
                     </h5>
                 </div>
                 <div class="card-body p-4">
@@ -36,9 +36,9 @@
 
                     @if(Auth::user()->doctorProfile->rejection_reason && !Auth::user()->doctorProfile->is_approved)
                         <div class="alert alert-danger mb-4">
-                            <h5><i class="bi bi-exclamation-triangle-fill me-2"></i>{{ __('Hồ sơ bị từ chối') }}</h5>
+                            <h5><i class="bi bi-exclamation-triangle-fill me-2"></i>{{ __('Profile Rejected') }}</h5>
                             <p class="mb-0">{{ Auth::user()->doctorProfile->rejection_reason }}</p>
-                            <small class="text-muted">{{ __('Vui lòng cập nhật lại thông tin hoặc bằng cấp để được duyệt lại.') }}</small>
+                            <small class="text-muted">{{ __('Please update your information or certificates for re-approval.') }}</small>
                         </div>
                     @endif
 
@@ -48,13 +48,13 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label fw-bold">{{ __('Họ và tên') }}</label>
+                                <label for="name" class="form-label fw-bold">{{ __('Full Name') }}</label>
                                 <input type="text" class="form-control" id="name" name="name" 
                                        value="{{ old('name', Auth::user()->name) }}" required>
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <label for="image" class="form-label fw-bold">{{ __('Hình đại diện') }}</label>
+                                <label for="image" class="form-label fw-bold">{{ __('Avatar') }}</label>
                                 <div class="d-flex align-items-center gap-3">
                                     <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name) }}" 
                                          alt="Avatar" class="rounded-circle shadow-sm" width="50" height="50" style="object-fit: cover;">
@@ -65,15 +65,15 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="phone" class="form-label fw-bold">{{ __('Số điện thoại') }}</label>
+                                <label for="phone" class="form-label fw-bold">{{ __('Phone Number') }}</label>
                                 <input type="text" class="form-control" id="phone" name="phone" 
                                        value="{{ old('phone', $doctor->phone) }}" required>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="specialization_id" class="form-label fw-bold">{{ __('Chuyên khoa') }}</label>
+                                <label for="specialization_id" class="form-label fw-bold">{{ __('Specialization') }}</label>
                                 <select class="form-select" id="specialization_id" name="specialization_id" required>
-                                    <option value="">{{ __('-- Chọn chuyên khoa --') }}</option>
+                                    <option value="">{{ __('-- Select Specialization --') }}</option>
                                     @foreach($specializations as $spec)
                                         <option value="{{ $spec->id }}" 
                                             {{ (old('specialization_id', $doctor->specialization_id) == $spec->id) ? 'selected' : '' }}>
@@ -86,9 +86,9 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="city_id" class="form-label fw-bold">{{ __('Thành phố / Tỉnh') }}</label>
+                                <label for="city_id" class="form-label fw-bold">{{ __('City / Province') }}</label>
                                 <select class="form-select" id="city_id" name="city_id" required>
-                                    <option value="">{{ __('-- Chọn thành phố --') }}</option>
+                                    <option value="">{{ __('-- Select City --') }}</option>
                                     @foreach($cities as $city)
                                         <option value="{{ $city->id }}" 
                                             {{ (old('city_id', $doctor->city_id) == $city->id) ? 'selected' : '' }}>
@@ -99,7 +99,7 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="license_number" class="form-label fw-bold">{{ __('Số chứng chỉ hành nghề') }}</label>
+                                <label for="license_number" class="form-label fw-bold">{{ __('Medical License Number') }}</label>
                                 <input type="text" class="form-control" id="license_number" name="license_number" 
                                        value="{{ old('license_number', $doctor->license_number) }}">
                             </div>
@@ -107,20 +107,20 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="consultation_fee" class="form-label fw-bold">{{ __('Phí khám (USD)') }}</label>
+                                <label for="consultation_fee" class="form-label fw-bold">{{ __('Consultation Fee (USD)') }}</label>
                                 <input type="number" class="form-control" id="consultation_fee" name="consultation_fee" 
                                        value="{{ old('consultation_fee', $doctor->consultation_fee) }}">
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="certificate" class="form-label fw-bold">{{ __('Bằng cấp/Chứng chỉ') }}</label>
+                            <label for="certificate" class="form-label fw-bold">{{ __('Degrees/Certificates') }}</label>
                             <input type="file" class="form-control" id="certificate" name="certificate[]" accept="image/*" multiple>
-                            <small class="text-muted fst-italic">{{ __('Bạn có thể chọn nhiều ảnh cùng lúc.') }}</small>
+                            <small class="text-muted fst-italic">{{ __('You can select multiple images.') }}</small>
                             
                             @if(!empty($doctor->certificate))
                                 <div class="mt-2 row g-2">
-                                    <p class="mb-1 text-muted small w-100">{{ __('Đã tải lên (Bấm icon thùng rác để xóa):') }}</p>
+                                    <p class="mb-1 text-muted small w-100">{{ __('Uploaded (Click trash icon to delete):') }}</p>
                                     @php
                                         $certs = $doctor->certificate ?? [];
                                         if (is_string($certs)) {
@@ -151,11 +151,11 @@
                                             
                                             {{-- Status Badge --}}
                                             @if(($cert['status'] ?? '') == 'approved')
-                                                <span class="badge bg-success position-absolute top-0 start-0 m-1" style="font-size: 0.6rem;">{{ __('Đã duyệt') }}</span>
+                                                <span class="badge bg-success position-absolute top-0 start-0 m-1" style="font-size: 0.6rem;">{{ __('Approved') }}</span>
                                             @elseif(($cert['status'] ?? '') == 'rejected')
-                                                <span class="badge bg-danger position-absolute top-0 start-0 m-1" style="font-size: 0.6rem;">{{ __('Từ chối') }}</span>
+                                                <span class="badge bg-danger position-absolute top-0 start-0 m-1" style="font-size: 0.6rem;">{{ __('Rejected') }}</span>
                                             @else
-                                                <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-1" style="font-size: 0.6rem;">{{ __('Chờ duyệt') }}</span>
+                                                <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-1" style="font-size: 0.6rem;">{{ __('Pending') }}</span>
                                             @endif
 
                                             <button type="button" class="btn btn-sm btn-danger rounded-circle p-0 d-flex justify-content-center align-items-center shadow-sm position-absolute top-0 end-0"
@@ -171,13 +171,13 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="bio" class="form-label fw-bold">{{ __('Giới thiệu bản thân') }}</label>
+                            <label for="bio" class="form-label fw-bold">{{ __('Bio') }}</label>
                             <textarea class="form-control" id="bio" name="bio" rows="4">{{ old('bio', $doctor->bio) }}</textarea>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="submit" class="btn btn-primary px-5">
-                                <i class="bi bi-save me-2"></i>{{ __('Lưu thay đổi') }}
+                                <i class="bi bi-save me-2"></i>{{ __('Save Changes') }}
                             </button>
                         </div>
                     </form>
@@ -191,26 +191,36 @@
 @push('scripts')
 <script>
     function deleteCertificate(imagePath) {
-        if (confirm('{{ __("Bạn có chắc chắn muốn xóa chứng chỉ này?") }}')) {
-            let form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '{{ route("doctor.profile.certificate.delete") }}';
-            
-            let csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
-            form.appendChild(csrfToken);
+        Swal.fire({
+            title: '{{ __("Are you sure you want to delete this certificate?") }}',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: '{{ __("Delete") }}',
+            cancelButtonText: '{{ __("Cancel") }}'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ route("doctor.profile.certificate.delete") }}';
+                
+                let csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = '_token';
+                csrfToken.value = '{{ csrf_token() }}';
+                form.appendChild(csrfToken);
 
-            let imageInput = document.createElement('input');
-            imageInput.type = 'hidden';
-            imageInput.name = 'image';
-            imageInput.value = imagePath;
-            form.appendChild(imageInput);
+                let imageInput = document.createElement('input');
+                imageInput.type = 'hidden';
+                imageInput.name = 'image';
+                imageInput.value = imagePath;
+                form.appendChild(imageInput);
 
-            document.body.appendChild(form);
-            form.submit();
-        }
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
     }
 </script>
 @endpush

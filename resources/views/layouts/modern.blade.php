@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -76,29 +75,39 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">{{ __('Overview') }}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}" href="{{ route('admin.doctors.index') }}">{{ __('Manage Doctors') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.patients.*') ? 'active' : '' }}" href="{{ route('admin.patients.index') }}">{{ __('Manage Patients') }}</a>
+                        <li class="nav-item dropdown">
+                             <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.doctors.*') || request()->routeIs('admin.patients.*') || request()->routeIs('cities.*') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ __('Management') }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('admin.doctors.index') }}">{{ __('Manage Doctors') }}</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.patients.index') }}">{{ __('Manage Patients') }}</a></li>
+                                <li><a class="dropdown-item" href="{{ route('cities.index') }}">{{ __('Manage Cities') }}</a></li>
+                            </ul>
                         </li>
                          <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('medical-content.*') ? 'active' : '' }}" href="{{ route('medical-content.index') }}">{{ __('News & Diseases') }}</a>
                         </li>
                          <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cities.*') ? 'active' : '' }}" href="{{ route('cities.index') }}">{{ __('Manage Cities') }}</a>
-                        </li>
-                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.feedbacks.*') ? 'active' : '' }}" href="{{ route('admin.feedbacks.index') }}">{{ __('Feedback') }}</a>
                         </li>
-                    @elseif(Auth::check() && Auth::user()->role === 'doctor')
-                        {{-- Doctor links are now in the sidebar --}}
+                    @elseif(Auth::check() && (Auth::user()->role === 'doctor' || Auth::user()->role == 2))
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('doctor.dashboard') ? 'active' : '' }}" href="{{ route('doctor.dashboard') }}">{{ __('Dashboard') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('doctor.appointments') ? 'active' : '' }}" href="{{ route('doctor.appointments') }}">{{ __('Manage Appointments') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('doctor.schedule') ? 'active' : '' }}" href="{{ route('doctor.schedule') }}">{{ __('Schedule') }}</a>
+                        </li>
                     @else
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('doctors.index') ? 'active' : '' }}" href="{{ route('doctors.index') }}">{{ __('Find Doctors') }}</a>
                         </li>
                     @endif
-                    @if(!Auth::check() || Auth::user()->role !== 'admin')
+                    
+                    @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role != 1 && Auth::user()->role !== 'doctor' && Auth::user()->role != 2))
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('news') ? 'active' : '' }}" href="{{ route('news') }}">{{ __('News') }}</a>
                     </li>
@@ -108,10 +117,28 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">{{ __('Contact') }}</a>
                     </li>
+                    @auth
+                        @if(Auth::user()->role !== 'admin' && Auth::user()->role != 1 && Auth::user()->role !== 'doctor' && Auth::user()->role != 2)
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('my.appointments') ? 'active' : '' }}" href="{{ route('my.appointments') }}">{{ __('My Appointments') }}</a>
+                            </li>
+                        @endif
+                    @endauth
                     @endif
                 </ul>
 
                 <ul class="navbar-nav">
+                    @auth
+                    <li class="nav-item me-3">
+                        <a class="nav-link position-relative" href="{{ route('notifications.index') }}">
+                            <i class="bi bi-bell-fill fs-5"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-count" style="display: none; font-size: 0.65rem;">
+                                0
+                            </span>
+                        </a>
+                    </li>
+                    @endauth
+
 
                     @auth
                         <li class="nav-item dropdown">
@@ -121,8 +148,11 @@
                                 <span>{{ Auth::user()->name }}</span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a></li>
-                                @if(Auth::user()->role === 'doctor')
+                                @if(Auth::user()->role !== 'admin' && Auth::user()->role != 1 && Auth::user()->role !== 'doctor' && Auth::user()->role != 2)
+                                    <li><a class="dropdown-item" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a></li>
+                                @endif
+
+                                @if(Auth::user()->role === 'doctor' || Auth::user()->role == 2)
                                     <li><a class="dropdown-item" href="{{ route('doctor.profile') }}">{{ __('Doctor Profile') }}</a></li>
                                     <li><a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Account Settings') }}</a></li>
                                 @else
@@ -192,7 +222,7 @@
 
                 <div class="col-lg-4 mb-4">
                     <h5 class="fw-bold">{{ __('Contact Us') }}</h5>
-                    <p><i class="bi bi-geo-alt me-2"></i>{{ __('123 Đường ABC, Quận 1, TP.HCM') }}</p>
+                    <p><i class="bi bi-geo-alt me-2"></i>{{ __('123 ABC Street, District 1, HCMC') }}</p>
                     <p><i class="bi bi-telephone me-2"></i>(028) 1234 5678</p>
                     <p><i class="bi bi-envelope me-2"></i>contact@mediconnect.vn</p>
                 </div>
@@ -212,6 +242,65 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Global confirmation handler
+        window.confirmAction = function(event, message) {
+            event.preventDefault();
+            const target = event.currentTarget; 
+            
+            Swal.fire({
+                title: '{{ __("Are you sure?") }}',
+                text: message || '{{ __("You won\'t be able to revert this!") }}',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: '{{ __("Yes, proceed!") }}',
+                cancelButtonText: '{{ __("Cancel") }}'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (target.tagName === 'FORM') {
+                        target.submit();
+                    } else if (target.tagName === 'A') {
+                         if (target.href) {
+                             window.location.href = target.href;
+                         } 
+                    } else if (target.tagName === 'BUTTON' && target.type === 'submit' && target.form) {
+                        target.form.submit();
+                    }
+                }
+            });
+            return false;
+        };
+    </script>
+    <script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function updateNotifications() {
+                const url = '{{ route('api.notifications.unread-count') }}';
+                fetch(url)
+                    .then(response => {
+                        if (response.ok) return response.json();
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(data => {
+                        const count = data.unread_count;
+                        const badge = document.getElementById('notification-count');
+                        if (badge) {
+                            badge.innerText = count;
+                            badge.style.display = count > 0 ? 'inline-block' : 'none';
+                        }
+                    })
+                    .catch(error => console.error('Error fetching notifications:', error));
+            }
+
+            if(document.getElementById('notification-count')) {
+                updateNotifications();
+                setInterval(updateNotifications, 30000); 
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

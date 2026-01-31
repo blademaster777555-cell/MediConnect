@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Models\DoctorAvailability;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ProfileUpdated;
+use App\Models\User;
 
 class DoctorController extends Controller
 {
@@ -20,7 +23,7 @@ class DoctorController extends Controller
                 'specialization_id' => null,
                 'city_id' => $user->city_id, // Inherit from user
                 'phone' => $user->phone ?? '',
-                'bio' => 'Chưa cập nhật tiểu sử',
+                'bio' => __('Bio not updated'),
             ]);
         }
         return $user->doctorProfile;
@@ -115,7 +118,7 @@ class DoctorController extends Controller
         // Manual validation for time range
         foreach ($data as $date => $row) {
             if ($row['start_time'] >= $row['end_time']) {
-                return redirect()->back()->withErrors(['error' => "Giờ kết thúc phải sau giờ bắt đầu (Ngày $date)"])->withInput();
+                return redirect()->back()->withErrors(['error' => __('End time must be after start time') . " ($date)"])->withInput();
             }
         }
 
@@ -135,7 +138,7 @@ class DoctorController extends Controller
         }
 
         return redirect()->route('doctor.schedule')
-            ->with('success', __('Lịch làm việc cho tuần này đã được cập nhật.'));
+            ->with('success', __('Weekly schedule has been updated successfully.'));
     }
 
     /**
@@ -180,9 +183,18 @@ class DoctorController extends Controller
             $updateData['payment_status'] = 'refunded';
         }
 
+        if ($request->has('patient_note')) {
+            $updateData['patient_note'] = $request->patient_note;
+        }
+
         $appointment->update($updateData);
 
-        return redirect()->back()->with('success', 'Appointment status updated successfully.');
+        // Notify Patient
+        if ($appointment->patientProfile && $appointment->patientProfile->user) {
+            $appointment->patientProfile->user->notify(new \App\Notifications\AppointmentNotification($appointment, 'status_update'));
+        }
+
+        return redirect()->back()->with('success', __('Appointment status updated successfully.'));
     }
 
     /**
@@ -215,6 +227,10 @@ class DoctorController extends Controller
         $this->getDoctorProfile(); // Ensure exists
         $this->doctorService->updateProfile(Auth::user(), $request->validated());
 
+        // Notify Admins
+        $admins = User::where('role', User::ROLE_ADMIN)->get();
+        Notification::send($admins, new ProfileUpdated(Auth::user()));
+
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
@@ -227,7 +243,7 @@ class DoctorController extends Controller
         $imagePath = $request->input('image');
 
         if (!$imagePath) {
-             return redirect()->back()->withErrors(['error' => __('Không tìm thấy ảnh để xóa.')]);
+             return redirect()->back()->withErrors(['error', __('Image not found to delete.')]);
         }
 
         $certs = $doctor->certificate ?? [];
@@ -268,9 +284,9 @@ class DoctorController extends Controller
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($imagePath);
             }
 
-            return redirect()->back()->with('success', __('Đã xóa chứng chỉ thành công.'));
+            return redirect()->back()->with('success', __('Certificate deleted successfully.'));
         }
 
-        return redirect()->back()->with('error', __('Không tìm thấy chứng chỉ này trong hồ sơ của bạn.'));
+        return redirect()->back()->with('error', __('Certificate not found in your profile.'));
     }
 }

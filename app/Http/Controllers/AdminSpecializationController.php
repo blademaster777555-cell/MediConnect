@@ -23,7 +23,7 @@ class AdminSpecializationController extends Controller
             'description' => $request->description
         ]);
 
-        return redirect()->back()->with('success', __('Thêm chuyên khoa thành công!'));
+        return redirect()->back()->with('success', __('Specialization added successfully!'));
     }
 
     // Hiển thị form chỉnh sửa
@@ -46,12 +46,12 @@ class AdminSpecializationController extends Controller
             'description' => $request->description
         ]);
 
-        return redirect()->route('specializations.index')->with('success', __('Cập nhật chuyên khoa thành công!'));
+        return redirect()->route('specializations.index')->with('success', __('Specialization updated successfully!'));
     }
 
     // Xóa chuyên khoa
     public function destroy($id) {
         Specialization::destroy($id);
-        return redirect()->back()->with('success', __('Đã xóa chuyên khoa!'));
+        return redirect()->back()->with('success', __('Specialization deleted successfully!'));
     }
 }

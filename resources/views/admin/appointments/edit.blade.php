@@ -52,7 +52,7 @@
                                         <option value="">-- Select a doctor --</option>
                                         @foreach($doctors as $doctor)
                                             <option value="{{ $doctor->id }}" {{ $appointment->doctor_id == $doctor->id ? 'selected' : '' }}>
-                                                {{ $doctor->user->name }} - {{ $doctor->specialization->name ?? 'Đa khoa' }}
+                                                {{ $doctor->user->name }} - {{ $doctor->specialization->name ?? __('General') }}
                                             </option>
                                         @endforeach
                                     </select>

@@ -8,7 +8,7 @@
             <form action="{{ route('notifications.mark-all-read') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-outline-primary btn-sm">
-                    <i class="bi bi-check-all"></i> {{ __('Đánh dấu tất cả đã đọc') }}
+                    <i class="bi bi-check-all"></i> {{ __('Mark all as read') }}
                 </button>
             </form>
         @endif
@@ -19,7 +19,7 @@
             @if($notifications->isEmpty())
                 <div class="text-center p-5 text-muted">
                     <i class="bi bi-bell-slash fs-1 d-block mb-3"></i>
-                    {{ __('Bạn không có thông báo nào.') }}
+                    {{ __('You do not have any new notification.') }}
                 </div>
             @else
                 <ul class="list-group list-group-flush">
@@ -27,33 +27,35 @@
                         <li class="list-group-item d-flex justify-content-between align-items-start {{ $notification->read_at ? '' : 'bg-light' }}">
                             <div class="ms-2 me-auto">
                                 <div class="fw-bold">
-                                    @if(isset($notification->data['type']) && $notification->data['type'] == 'new_doctor')
-                                        <i class="bi bi-person-plus-fill text-primary me-2"></i>
-                                    @elseif(isset($notification->data['type']) && $notification->data['type'] == 'new_appointment')
-                                        <i class="bi bi-calendar-plus-fill text-success me-2"></i>
-                                    @else
-                                        <i class="bi bi-info-circle-fill text-info me-2"></i>
-                                    @endif
                                     @php
-                                        $message = $notification->data['message'] ?? __('Thông báo hệ thống');
-                                        if (isset($notification->data['type'])) {
-                                            if ($notification->data['type'] == 'new_appointment') {
-                                                $message = Str::replace('Lịch hẹn mới', __('Lịch hẹn mới'), $message);
-                                            } elseif ($notification->data['type'] == 'new_doctor') {
-                                                $message = Str::replace('Bác sĩ mới đăng ký', __('Bác sĩ mới đăng ký'), $message);
-                                            }
-                                        }
+                                        $type = $notification->data['type'] ?? 'info';
+                                        $message = $notification->data['message'] ?? __('System Report');
                                     @endphp
+
+                                    @if($type == 'new_booking' || $type == 'new_appointment')
+                                        <i class="bi bi-calendar-plus-fill text-primary me-2"></i>
+                                    @elseif($type == 'status_update')
+                                        <i class="bi bi-info-circle-fill text-info me-2"></i>
+                                    @elseif($type == 'profile_approved')
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    @elseif($type == 'profile_rejected')
+                                        <i class="bi bi-x-circle-fill text-danger me-2"></i>
+                                    @elseif($type == 'new_doctor')
+                                        <i class="bi bi-person-plus-fill text-primary me-2"></i>
+                                    @else
+                                        <i class="bi bi-bell-fill text-secondary me-2"></i>
+                                    @endif
+                                    
                                     {{ $message }}
                                 </div>
                                 <span class="text-muted small">
                                     {{ $notification->created_at->diffForHumans() }}
                                 </span>
                                 
-                                @if(isset($notification->data['link']))
-                                    <div class="mt-1">
-                                        <a href="{{ $notification->data['link'] }}" class="btn btn-sm btn-link text-decoration-none p-0">
-                                            {{ __('Xem chi tiết') }} <i class="bi bi-arrow-right"></i>
+                                @if(isset($notification->data['link']) && $notification->data['link'] != '#')
+                                    <div class="mt-2">
+                                        <a href="{{ $notification->data['link'] }}" class="btn btn-sm btn-outline-primary py-0 px-2">
+                                            {{ __('Xem chi tiết') }} <i class="bi bi-arrow-right ms-1"></i>
                                         </a>
                                     </div>
                                 @endif

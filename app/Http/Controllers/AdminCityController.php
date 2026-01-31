@@ -15,7 +15,7 @@ class AdminCityController extends Controller
     public function store(Request $request) {
         $request->validate(['name' => 'required|unique:cities,name']);
         City::create(['name' => $request->name]);
-        return redirect()->back()->with('success', __('Thêm thành phố thành công!'));
+        return redirect()->back()->with('success', __('City added successfully!'));
     }
 
     // Hiển thị form chỉnh sửa
@@ -29,12 +29,12 @@ class AdminCityController extends Controller
         $city = City::findOrFail($id);
         $request->validate(['name' => 'required|unique:cities,name,' . $id]);
         $city->update(['name' => $request->name]);
-        return redirect()->route('admin.cities.index')->with('success', __('Cập nhật thành phố thành công!'));
+        return redirect()->route('admin.cities.index')->with('success', __('City updated successfully!'));
     }
 
     // Xóa thành phố
     public function destroy($id) {
         City::destroy($id);
-        return redirect()->back()->with('success', __('Đã xóa thành phố!'));
+        return redirect()->back()->with('success', __('City deleted successfully!'));
     }
 }

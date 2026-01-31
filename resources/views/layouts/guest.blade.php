@@ -76,7 +76,7 @@
                             <i class="bi bi-heart-pulse-fill text-danger fs-1"></i>
                         </a>
                         <h2 class="fw-bold mt-2 text-dark">MediConnect</h2>
-                        <p class="text-muted">{{ __('Chăm sóc sức khỏe toàn diện') }}</p>
+                        <p class="text-muted">{{ __('Comprehensive Healthcare') }}</p>
                     </div>
 
                     {{ $slot }}

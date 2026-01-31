@@ -6,13 +6,13 @@
         <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-star-fill me-2"></i>{{ __('Đánh giá & Phản hồi') }}</h5>
+                    <h5 class="mb-0"><i class="bi bi-star-fill me-2"></i>{{ __('Review & Feedback') }}</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="mb-4">
-                        <h6>{{ __('Thông tin lịch hẹn') }}</h6>
-                        <p class="mb-1"><strong>{{ __('Bác sĩ') }}:</strong> {{ $appointment->doctorProfile->user->name }} - {{ $appointment->doctorProfile->specialization->name }}</p>
-                        <p class="mb-1"><strong>{{ __('Ngày khám') }}:</strong> {{ \Carbon\Carbon::parse($appointment->date)->format('d/m/Y') }} - {{ $appointment->time }}</p>
+                        <h6>{{ __('Appointment Information') }}</h6>
+                        <p class="mb-1"><strong>{{ __('Doctor') }}:</strong> {{ $appointment->doctorProfile->user->name }} - {{ $appointment->doctorProfile->specialization->name }}</p>
+                        <p class="mb-1"><strong>{{ __('Appointment Date') }}:</strong> {{ \Carbon\Carbon::parse($appointment->date)->format('d/m/Y') }} - {{ $appointment->time }}</p>
                     </div>
 
                     <form action="{{ route('feedback.store') }}" method="POST">
@@ -20,7 +20,7 @@
                         <input type="hidden" name="appointment_id" value="{{ $appointment->id }}">
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold">{{ __('Đánh giá trải nghiệm của bạn') }} <span class="text-danger">*</span></label>
+                            <label class="form-label fw-bold">{{ __('Rate your experience') }} <span class="text-danger">*</span></label>
                             <div class="rating-css">
                                 <div class="star-icon">
                                     <input type="radio" value="5" name="rating" id="rating5">
@@ -49,13 +49,13 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="comment" class="form-label fw-bold">{{ __('Nhận xét chi tiết') }}</label>
-                            <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="{{ __('Chia sẻ thêm về trải nghiệm của bạn (tùy chọn)...') }}"></textarea>
+                            <label for="comment" class="form-label fw-bold">{{ __('Detailed Comment') }}</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="{{ __('Share more about your experience (optional)...') }}"></textarea>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="{{ route('my.appointments') }}" class="btn btn-secondary me-md-2">{{ __('Hủy bỏ') }}</a>
-                            <button type="submit" class="btn btn-primary px-4">{{ __('Gửi đánh giá') }}</button>
+                            <a href="{{ route('my.appointments') }}" class="btn btn-secondary me-md-2">{{ __('Cancel') }}</a>
+                            <button type="submit" class="btn btn-primary px-4">{{ __('Submit Review') }}</button>
                         </div>
                     </form>
                 </div>

@@ -10,16 +10,16 @@
                 <img src="{{ $doctor->user->image ? asset('storage/' . $doctor->user->image) : 'https://ui-avatars.com/api/?name='.urlencode($doctor->user->name) }}"
                         class="rounded-circle mx-auto mb-3 shadow-sm" width="150" style="object-fit: cover;">
                 <h4 class="fw-bold">{{ $doctor->user->name }}</h4>
-                <p class="text-primary fw-bold mb-2">{{ $doctor->specialization->name ?? __('Chưa cập nhật chuyên khoa') }}</p>
+                <p class="text-primary fw-bold mb-2">{{ $doctor->specialization->name ?? __('Specialization not updated') }}</p>
                 <p class="text-muted small mb-3">{{ $doctor->bio }}</p>
                 <div class="mb-3">
                     <span class="badge bg-success fs-6">
-                        <i class="bi bi-cash-coin me-1"></i> {{ __('Phí khám') }}: {{ number_format($doctor->consultation_fee, 2, '.', ',') }} USD
+                        <i class="bi bi-cash-coin me-1"></i> {{ __('Consultation Fee') }}: {{ number_format($doctor->consultation_fee, 2, '.', ',') }} USD
                     </span>
                 </div>
                 <div class="d-flex justify-content-center gap-2">
                     <span class="badge bg-info">
-                        <i class="bi bi-geo-alt-fill me-1"></i>{{ $doctor->city->name ?? __('Chưa cập nhật') }}
+                        <i class="bi bi-geo-alt-fill me-1"></i>{{ $doctor->city->name ?? __('Not updated') }}
                     </span>
                 </div>
             </div>
@@ -28,7 +28,7 @@
         <div class="col-lg-8">
             <div class="card card-shadow">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-calendar-check me-2"></i>{{ __('Đặt lịch khám') }}</h5>
+                    <h5 class="mb-0"><i class="bi bi-calendar-check me-2"></i>{{ __('Book Appointment') }}</h5>
                 </div>
                 <div class="card-body">
                     @if(session('error'))
@@ -42,31 +42,31 @@
                         @auth
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">{{ __('Chọn Ngày') }}</label>
-                                    <input type="text" name="date" id="appointment-date" class="form-control bg-white" required placeholder="{{ __('Chọn ngày khám') }}">
+                                    <label class="form-label fw-bold">{{ __('Select Date') }}</label>
+                                    <input type="text" name="date" id="appointment-date" class="form-control bg-white" required placeholder="{{ __('Select Date') }}">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">{{ __('Chọn Giờ') }}</label>
+                                    <label class="form-label fw-bold">{{ __('Select Time') }}</label>
                                     <select name="time" id="appointment-time" class="form-select" required>
-                                        <option value="">{{ __('-- Vui lòng chọn ngày trước --') }}</option>
+                                        <option value="">{{ __('-- Please select date first --') }}</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label fw-bold">{{ __('Triệu chứng / Ghi chú') }}</label>
-                                <textarea name="patient_note" class="form-control" rows="3" placeholder="{{ __('Mô tả triệu chứng hoặc ghi chú...') }}"></textarea>
+                                <label class="form-label fw-bold">{{ __('Symptoms / Notes') }}</label>
+                                <textarea name="patient_note" class="form-control" rows="3" placeholder="{{ __('Describe symptoms or notes...') }}"></textarea>
                             </div>
 
                             <button type="submit" class="btn btn-success w-100 fw-bold">
-                                <i class="bi bi-check-circle me-2"></i>{{ __('Xác nhận đặt lịch') }}
+                                <i class="bi bi-check-circle me-2"></i>{{ __('Confirm Booking') }}
                             </button>
                         @else
                             <div class="text-center py-4 bg-light rounded border border-secondary border-dashed">
                                 <i class="bi bi-shield-lock fs-1 text-muted mb-3 d-block"></i>
-                                <h5 class="text-muted mb-3">{{ __('Vui lòng đăng nhập để xem lịch khám và đặt lịch') }}</h5>
+                                <h5 class="text-muted mb-3">{{ __('Please login to view schedule and book appointment') }}</h5>
                                 <a href="{{ route('login') }}" class="btn btn-primary fw-bold px-4">
-                                    <i class="bi bi-box-arrow-in-right me-2"></i>{{ __('Đăng nhập') }}
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>{{ __('Login') }}
                                 </a>
                             </div>
                         @endauth
@@ -78,7 +78,7 @@
 
             <div class="card card-shadow mt-4">
                 <div class="card-header bg-white fw-bold">
-                    {{ __('Đánh giá từ bệnh nhân') }} ({{ $doctor->feedbacks->count() }})
+                    {{ __('Patient Reviews') }} ({{ $doctor->feedbacks->count() }})
                 </div>
                 <div class="card-body">
                     @foreach($doctor->feedbacks as $feedback)
@@ -97,7 +97,7 @@
                     @endforeach
 
                     @if($doctor->feedbacks->count() == 0)
-                        <p class="text-center text-muted">{{ __('Chưa có đánh giá nào.') }}</p>
+                        <p class="text-center text-muted">{{ __('No reviews yet.') }}</p>
                     @endif
                 </div>
             </div>
@@ -124,17 +124,17 @@
 
         function fetchAvailability(date) {
             // Reset time select
-            timeSelect.innerHTML = '<option value="">Đang tải...</option>';
+            timeSelect.innerHTML = '<option value="">{{ __("Loading...") }}</option>';
             timeSelect.disabled = true;
 
             fetch(`{{ route('api.doctor-availability') }}?doctor_id=${doctorId}&date=${date}`)
                 .then(response => response.json())
                 .then(data => {
-                    timeSelect.innerHTML = '<option value="">-- {{ __("Chọn khung giờ") }} --</option>';
+                    timeSelect.innerHTML = '<option value="">-- {{ __("Select Time Slot") }} --</option>';
                     
                     if (!data.available) {
                         const option = document.createElement('option');
-                        option.text = data.message || '{{ __("Bác sĩ không làm việc ngày này") }}';
+                        option.text = data.message || '{{ __("Doctor is not working on this day") }}';
                         timeSelect.add(option);
                         timeSelect.disabled = true;
                         return;
@@ -142,7 +142,7 @@
 
                     if (data.slots.length === 0) {
                         const option = document.createElement('option');
-                        option.text = '{{ __("Hết lịch hẹn trong ngày") }}';
+                        option.text = '{{ __("No slots available today") }}';
                         timeSelect.add(option);
                         timeSelect.disabled = true;
                         return;
@@ -152,7 +152,7 @@
                     data.slots.forEach(slot => {
                         const option = document.createElement('option');
                         option.value = slot.time;
-                        option.text = slot.display + (slot.is_booked ? ' ({{ __("Đã đặt") }})' : '');
+                        option.text = slot.display + (slot.is_booked ? ' ({{ __("Booked") }})' : '');
                         if (slot.is_booked) {
                             option.disabled = true;
                             option.classList.add('text-muted');
@@ -162,7 +162,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    timeSelect.innerHTML = '<option value="">{{ __("Lỗi tải dữ liệu") }}</option>';
+                    timeSelect.innerHTML = '<option value="">{{ __("Error loading data") }}</option>';
                 });
         }
     });

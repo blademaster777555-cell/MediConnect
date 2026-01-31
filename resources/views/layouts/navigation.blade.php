@@ -19,21 +19,24 @@
                     @auth
                         @if(Auth::user()->role === 1) <!-- Admin -->
                             <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                                {{ __('Quản lý User') }}
+                                {{ __('Manage Users') }}
                             </x-nav-link>
                             <x-nav-link :href="route('admin.appointments')" :active="request()->routeIs('admin.appointments*')">
-                                {{ __('Lịch hẹn') }}
+                                {{ __('Appointments') }}
                             </x-nav-link>
                         @elseif(Auth::user()->role === 2) <!-- Doctor -->
+                            <x-nav-link :href="route('doctor.dashboard')" :active="request()->routeIs('doctor.dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
                             <x-nav-link :href="route('doctor.appointments')" :active="request()->routeIs('doctor.appointments')">
-                                {{ __('Quản lý lịch hẹn') }}
+                                {{ __('Manage Appointments') }}
                             </x-nav-link>
                         @else <!-- Patient -->
                             <x-nav-link :href="route('doctors.index')" :active="request()->routeIs('doctors.*')">
-                                {{ __('Tìm bác sĩ') }}
+                                {{ __('Find Doctors') }}
                             </x-nav-link>
                             <x-nav-link :href="route('my.appointments')" :active="request()->routeIs('my.appointments')">
-                                {{ __('Lịch hẹn của tôi') }}
+                                {{ __('My Appointments') }}
                             </x-nav-link>
                         @endif
                     @endauth
@@ -59,7 +62,7 @@
             <x-slot name="content">
                 <!-- Common links for all roles -->
                 <x-dropdown-link :href="route('profile.edit')">
-                    {{ __('Hồ sơ cá nhân') }}
+                    {{ __('Profile') }}
                 </x-dropdown-link>
 
                 <!-- Role-specific links -->
@@ -69,32 +72,29 @@
                         {{ __('Admin Dashboard') }}
                     </x-dropdown-link>
                     <x-dropdown-link :href="route('admin.users.index')">
-                        {{ __('Quản lý người dùng') }}
+                        {{ __('Manage Users') }}
                     </x-dropdown-link>
                     <x-dropdown-link :href="route('admin.appointments')">
-                        {{ __('Tất cả lịch hẹn') }}
+                        {{ __('All Appointments') }}
                     </x-dropdown-link>
                 @elseif(Auth::user()->role === 2) <!-- Doctor -->
                     <div class="border-t border-gray-100"></div>
-                    <x-dropdown-link :href="route('doctor.dashboard')">
-                        {{ __('Dashboard bác sĩ') }}
-                    </x-dropdown-link>
                     <x-dropdown-link :href="route('doctor.appointments')">
-                        {{ __('Quản lý lịch hẹn') }}
+                        {{ __('Manage Appointments') }}
                     </x-dropdown-link>
                     <x-dropdown-link :href="route('doctor.schedule')">
-                        {{ __('Quản lý lịch rảnh') }}
+                        {{ __('Manage Schedule') }}
                     </x-dropdown-link>
                 @else <!-- Patient -->
                     <div class="border-t border-gray-100"></div>
                     <x-dropdown-link :href="route('doctors.index')">
-                        {{ __('Tìm bác sĩ') }}
+                        {{ __('Find Doctors') }}
                     </x-dropdown-link>
                     <x-dropdown-link :href="route('my.appointments')">
-                        {{ __('Lịch hẹn của tôi') }}
+                        {{ __('My Appointments') }}
                     </x-dropdown-link>
                     <x-dropdown-link :href="route('news')">
-                        {{ __('Tin tức y tế') }}
+                        {{ __('Medical News') }}
                     </x-dropdown-link>
                 @endif
 
@@ -104,15 +104,15 @@
                     <x-dropdown-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Đăng xuất') }}
+                        {{ __('Log Out') }}
                     </x-dropdown-link>
                 </form>
             </x-slot>
         </x-dropdown>
     @else
         <div class="space-x-4">
-            <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Đăng nhập</a>
-            <a href="{{ route('register') }}" class="text-sm text-gray-700 underline">Đăng ký</a>
+            <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">{{ __('Login') }}</a>
+            <a href="{{ route('register') }}" class="text-sm text-gray-700 underline">{{ __('Register') }}</a>
         </div>
     @endauth
 </div>
@@ -163,10 +163,10 @@
     @else
         <div class="mt-3 space-y-1">
             <x-responsive-nav-link :href="route('login')">
-                Đăng nhập
+                {{ __('Login') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('register')">
-                Đăng ký
+                {{ __('Register') }}
             </x-responsive-nav-link>
         </div>
     @endauth

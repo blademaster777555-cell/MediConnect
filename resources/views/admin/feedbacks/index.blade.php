@@ -5,7 +5,7 @@
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="h3 mb-0 text-gray-800">
-                <i class="bi bi-chat-square-quote-fill me-2"></i>{{ __('Quản lý Phản hồi') }}
+                <i class="bi bi-chat-square-quote-fill me-2"></i>{{ __('Feedback Management') }}
             </h1>
         </div>
     </div>
@@ -16,7 +16,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">{{ __('Danh sách đánh giá từ bệnh nhân') }}</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{ __('Patient Feedback List') }}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -24,12 +24,12 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>{{ __('Bệnh nhân') }}</th>
-                            <th>{{ __('Bác sĩ') }}</th>
-                            <th>{{ __('Đánh giá') }}</th>
-                            <th>{{ __('Nhận xét') }}</th>
-                            <th>{{ __('Ngày tạo') }}</th>
-                            <th>{{ __('Thao tác') }}</th>
+                            <th>{{ __('Patient') }}</th>
+                            <th>{{ __('Doctor') }}</th>
+                            <th>{{ __('Rating') }}</th>
+                            <th>{{ __('Comment') }}</th>
+                            <th>{{ __('Date') }}</th>
+                            <th>{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,7 +64,7 @@
                                 <form action="{{ route('admin.feedbacks.destroy', $feedback->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('{{ __('Bạn có chắc muốn xóa phản hồi này?') }}')">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirmAction(event, '{{ __('Are you sure you want to delete this feedback?') }}')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>

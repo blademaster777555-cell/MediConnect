@@ -57,8 +57,32 @@ class NotificationController extends Controller
      */
     public function unreadCount()
     {
-        $count = Auth::user()->unreadNotifications()->count();
+        $user = Auth::user();
+        $count = $user->unreadNotifications()->count();
+        
+        // Eager load latest 5 for dropdown
+        $notifications = $user->notifications()->latest()->take(5)->get();
+        $latest = $notifications->map(function($n) {
+            $type = $n->data['type'] ?? 'info';
+            $message = $n->data['message'] ?? __('System Notification');
 
-        return response()->json(['unread_count' => $count]);
+            if ($type == 'new_appointment') {
+                 $message = str_replace('Lịch hẹn mới', __('New Appointment'), $message);
+            }
+
+            return [
+                'id' => $n->id,
+                'message' => $message,
+                'type' => $type,
+                'time' => $n->created_at->diffForHumans(),
+                'read_at' => $n->read_at,
+                'link' => $n->data['link'] ?? '#',
+            ];
+        });
+
+        return response()->json([
+            'unread_count' => $count,
+            'latest_notifications' => $latest
+        ]);
     }
 }

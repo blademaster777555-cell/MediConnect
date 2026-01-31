@@ -20,32 +20,32 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <h5 class="text-uppercase fw-bold text-primary">MediConnect</h5>
-                <p>Nền tảng đặt lịch khám bệnh trực tuyến hàng đầu.</p>
-                <p><i class="bi bi-geo-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
+                <p>The leading online medical appointment platform.</p>
+                <p><i class="bi bi-geo-alt"></i> 123 ABC Street, District 1, HCMC</p>
                 <p><i class="bi bi-envelope"></i> contact@mediconnect.com</p>
             </div>
 
             <div class="col-md-4 mb-4">
                 <h5 class="text-uppercase fw-bold text-primary">Sitemap</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{{ route('home') }}" class="text-light text-decoration-none">→ Trang chủ</a></li>
-                    <li><a href="{{ route('doctors.index') }}" class="text-light text-decoration-none">→ Tìm Bác sĩ</a></li>
-                    <li><a href="{{ route('about') }}" class="text-light text-decoration-none">→ Giới thiệu</a></li>
-                    <li><a href="{{ route('contact') }}" class="text-light text-decoration-none">→ Liên hệ</a></li>
+                    <li><a href="{{ route('home') }}" class="text-light text-decoration-none">→ {{ __('Home') }}</a></li>
+                    <li><a href="{{ route('doctors.index') }}" class="text-light text-decoration-none">→ {{ __('Find Doctors') }}</a></li>
+                    <li><a href="{{ route('about') }}" class="text-light text-decoration-none">→ {{ __('About Us') }}</a></li>
+                    <li><a href="{{ route('contact') }}" class="text-light text-decoration-none">→ {{ __('Contact') }}</a></li>
                     @auth
-                        <li><a href="{{ route('my.appointments') }}" class="text-light text-decoration-none">→ Lịch sử khám</a></li>
+                        <li><a href="{{ route('my.appointments') }}" class="text-light text-decoration-none">→ {{ __('My Appointments') }}</a></li>
                     @else
-                        <li><a href="{{ route('login') }}" class="text-light text-decoration-none">→ Đăng nhập Bệnh nhân</a></li>
-                        <li><a href="{{ route('login') }}" class="text-light text-decoration-none">→ Đăng nhập Bác sĩ</a></li>
+                        <li><a href="{{ route('login') }}" class="text-light text-decoration-none">→ {{ __('Patient Login') }}</a></li>
+                        <li><a href="{{ route('login') }}" class="text-light text-decoration-none">→ {{ __('Doctor Login') }}</a></li>
                     @endauth
                 </ul>
             </div>
 
             <div class="col-md-4">
-                <h5 class="text-uppercase fw-bold text-primary">Chính sách</h5>
+                <h5 class="text-uppercase fw-bold text-primary">{{ __('Policies') }}</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-light text-decoration-none">Điều khoản sử dụng</a></li>
-                    <li><a href="#" class="text-light text-decoration-none">Chính sách bảo mật</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">{{ __('Terms of Use') }}</a></li>
+                    <li><a href="#" class="text-light text-decoration-none">{{ __('Privacy Policy') }}</a></li>
                 </ul>
             </div>
         </div>

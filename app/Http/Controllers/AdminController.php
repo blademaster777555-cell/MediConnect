@@ -19,7 +19,7 @@ class AdminController extends Controller
             'doctors' => User::where('role', User::ROLE_DOCTOR)->count(),
             'patients' => User::where('role', User::ROLE_PATIENT)->count(),
             'total_users' => User::count(),
-            'appointments' => Appointment::count(),
+            'appointments' => Appointment::where('status', 'cancelled')->count(),
             'pending_appointments' => Appointment::where('status', 'pending')->count(),
             'confirmed_appointments' => Appointment::where('status', 'confirmed')->count(),
             'completed_appointments' => Appointment::where('status', 'completed')->count(),
@@ -55,7 +55,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         
         if ($user->role !== User::ROLE_DOCTOR) {
-            return redirect()->back()->with('error', __('Tài khoản này không phải là bác sĩ!'));
+            return redirect()->back()->with('error', __('This account is not a doctor!'));
         }
 
         if ($user->doctorProfile) {
@@ -63,10 +63,18 @@ class AdminController extends Controller
                 'is_approved' => true,
                 'rejection_reason' => null
             ]);
-            return redirect()->back()->with('success', __('Đã duyệt tài khoản bác sĩ') . ' ' . $user->name);
+            
+            // Notify Doctor
+            $user->notify(new \App\Notifications\SystemNotification(
+                __('Your doctor profile has been approved. You can now start using the platform.'),
+                route('doctor.profile'),
+                'profile_approved'
+            ));
+
+            return redirect()->back()->with('success', __('Doctor account approved') . ' ' . $user->name);
         }
 
-        return redirect()->back()->with('error', __('Bác sĩ này chưa cập nhật hồ sơ, không thể duyệt!'));
+        return redirect()->back()->with('error', __('This doctor has not updated their profile, cannot receive approval!'));
     }
 
     public function rejectDoctor(Request $request, $id)
@@ -74,7 +82,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         
         if ($user->role !== User::ROLE_DOCTOR) {
-            return redirect()->back()->with('error', __('Tài khoản này không phải là bác sĩ!'));
+            return redirect()->back()->with('error', __('This account is not a doctor!'));
         }
 
         $request->validate([
@@ -111,10 +119,18 @@ class AdminController extends Controller
                 'is_approved' => false,
                 'rejection_reason' => $request->reason
             ]);
-            return redirect()->back()->with('success', __('Đã từ chối duyệt bác sĩ. Lý do đã được gửi.'));
+
+            // Notify Doctor
+            $user->notify(new \App\Notifications\SystemNotification(
+                __('Your doctor profile has been rejected. Reason: :reason', ['reason' => $request->reason]),
+                route('doctor.profile'),
+                'profile_rejected'
+            ));
+
+            return redirect()->back()->with('success', __('Doctor profile rejected. Reason sent.'));
         }
 
-        return redirect()->back()->with('error', __('Hồ sơ không tồn tại!'));
+        return redirect()->back()->with('error', __('Profile not found!'));
     }
 
     public function approveCertificates(Request $request, $id)
@@ -122,7 +138,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         
         if ($user->role !== User::ROLE_DOCTOR) {
-            return redirect()->back()->with('error', __('Tài khoản này không phải là bác sĩ!'));
+            return redirect()->back()->with('error', __('This account is not a doctor!'));
         }
 
         $request->validate([
@@ -176,10 +192,10 @@ class AdminController extends Controller
                 'rejection_reason' => null
             ]);
 
-            return redirect()->back()->with('success', __('Đã duyệt các chứng chỉ đã chọn.'));
+            return redirect()->back()->with('success', __('Selected certificates approved.'));
         }
 
-        return redirect()->back()->with('error', __('Hồ sơ không tồn tại!'));
+        return redirect()->back()->with('error', __('Profile not found!'));
     }
 
     public function rejectCertificates(Request $request, $id)
@@ -187,7 +203,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         
         if ($user->role !== User::ROLE_DOCTOR) {
-            return redirect()->back()->with('error', __('Tài khoản này không phải là bác sĩ!'));
+            return redirect()->back()->with('error', __('This account is not a doctor!'));
         }
 
         $request->validate([
@@ -233,10 +249,10 @@ class AdminController extends Controller
                 // 'rejection_reason' => $request->reason // Keep global reason? Or per cert? This updates global.
             ]);
 
-            return redirect()->back()->with('success', __('Đã từ chối các chứng chỉ đã chọn.'));
+            return redirect()->back()->with('success', __('Selected certificates have been rejected.'));
         }
 
-        return redirect()->back()->with('error', __('Hồ sơ không tồn tại!'));
+        return redirect()->back()->with('error', __('Profile not found!'));
     }
 
     // Manage Doctor Schedule (Admin)
@@ -254,7 +270,7 @@ class AdminController extends Controller
                 'specialization_id' => null,
                 'city_id' => $user->city_id,
                 'phone' => $user->phone ?? '',
-                'bio' => 'Chưa cập nhật tiểu sử',
+                'bio' => __('Bio not updated'),
             ]);
         }
 
@@ -302,7 +318,7 @@ class AdminController extends Controller
         
         foreach ($data as $date => $row) {
             if ($row['start_time'] >= $row['end_time']) {
-                return redirect()->back()->withErrors(['error' => __('Giờ kết thúc phải sau giờ bắt đầu') . " ($date)"])->withInput();
+                return redirect()->back()->withErrors(['error' => __('End time must be after start time') . " ($date)"])->withInput();
             }
         }
 
@@ -321,7 +337,7 @@ class AdminController extends Controller
             );
         }
 
-        return redirect()->back()->with('success', __('Cập nhật lịch làm việc thành công!'));
+        return redirect()->back()->with('success', __('Work schedule updated successfully!'));
     }
 
     // 3. FORM THÊM USER MỚI
@@ -361,19 +377,19 @@ class AdminController extends Controller
                 'specialization_id' => $request->specialization_id,
                 'city_id' => $request->city_id,
                 'phone' => $request->phone,
-                'bio' => 'Chưa cập nhật thông tin',
+                'bio' => __('Info not updated'),
                 'full_name' => $request->name,
             ]);
         } elseif ($request->role === User::ROLE_PATIENT) {
             $user->patientProfile()->create([
                 'phone' => $request->phone,
                 // 'city_id' => $request->city_id, // Patient might not have city_id based on schema, checking...
-                'address' => $request->address ?? 'Chưa cập nhật',
+                'address' => $request->address ?? __('Not updated'),
                 'full_name' => $request->name,
             ]);
         }
 
-        return redirect()->route('users.index')->with('success', __('Thêm người dùng thành công!'));
+        return redirect()->route('users.index')->with('success', __('User added successfully!'));
     }
 
     // 5. HIỂN THỊ CHI TIẾT USER (READ-ONLY)
@@ -447,7 +463,7 @@ class AdminController extends Controller
             );
         }
 
-        return redirect()->route('users.index')->with('success', __('Cập nhật người dùng thành công!'));
+        return redirect()->route('users.index')->with('success', __('User updated successfully!'));
     }
 
     // 7. XÓA USER
@@ -498,7 +514,7 @@ class AdminController extends Controller
         // Final User Delete
         $user->delete();
 
-        return redirect()->back()->with('success', __('Đã xóa người dùng thành công!'));
+        return redirect()->back()->with('success', __('User deleted successfully!'));
     }
 
     // 8. QUẢN LÝ LỊCH HẸN (Admin)
@@ -544,7 +560,7 @@ class AdminController extends Controller
              // Fallback: create empty profile if missing? or error.
              // For now assume profile exists or auto-create in a robust system.
              // Let's try to get ID or fail.
-             return redirect()->back()->with('error', __('Người dùng này chưa có hồ sơ bệnh nhân!'));
+             return redirect()->back()->with('error', __('This user does not have a patient profile!'));
         }
 
         // Kiểm tra trùng lịch
@@ -556,7 +572,7 @@ class AdminController extends Controller
                     ->exists();
 
         if ($exists) {
-            return redirect()->back()->with('error', __('Khung giờ này đã có người đặt!'));
+            return redirect()->back()->with('error', __('This time slot is already booked!'));
         }
 
         $appointment->update([
@@ -573,7 +589,7 @@ class AdminController extends Controller
             $appointment->update(['payment_status' => 'refunded']);
         }
 
-        return redirect()->route('admin.appointments')->with('success', __('Cập nhật lịch hẹn thành công!'));
+        return redirect()->route('admin.appointments')->with('success', __('Appointment updated successfully!'));
     }
 
     // 11. XÓA LỊCH HẸN (Admin)
@@ -582,6 +598,6 @@ class AdminController extends Controller
         $appointment = Appointment::findOrFail($id);
         $appointment->delete();
 
-        return redirect()->route('admin.appointments')->with('success', __('Xóa lịch hẹn thành công!'));
+        return redirect()->route('admin.appointments')->with('success', __('Appointment deleted successfully!'));
     }
 }

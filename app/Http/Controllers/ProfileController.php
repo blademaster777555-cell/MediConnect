@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ProfileUpdated;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -33,6 +36,10 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+
+        // Notify Admins
+        $admins = User::where('role', User::ROLE_ADMIN)->get();
+        Notification::send($admins, new ProfileUpdated($request->user()));
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }

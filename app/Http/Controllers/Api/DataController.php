@@ -77,7 +77,7 @@ class DataController extends Controller
             return response()->json([
                 'available' => false,
                 'slots' => [],
-                'message' => 'Bác sĩ không làm việc vào ngày này.'
+                'message' => __('Doctor is not available on this day')
             ]);
         }
 

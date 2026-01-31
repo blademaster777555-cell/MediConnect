@@ -10,7 +10,7 @@
         <div class="col-lg-9">
             <div class="card card-shadow">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">{{ __('Quản lý lịch làm việc tuần') }}</h5>
+                    <h5 class="mb-0">{{ __('Weekly Schedule Management') }}</h5>
                 </div>
                 <div class="card-body">
                     @if(session('success'))
@@ -31,10 +31,10 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>{{ __('Ngày') }}</th>
-                                    <th>{{ __('Giờ bắt đầu') }}</th>
-                                    <th>{{ __('Giờ kết thúc') }}</th>
-                                    <th>{{ __('Trạng thái') }}</th>
+                                    <th>{{ __('Date') }}</th>
+                                    <th>{{ __('Start Time') }}</th>
+                                    <th>{{ __('End Time') }}</th>
+                                    <th>{{ __('Status') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,8 +71,8 @@
                                             </td>
                                             <td>
                                                 <select name="schedule[{{ $date }}][is_available]" class="form-select">
-                                                    <option value="1" {{ $availability && $availability->is_available ? 'selected' : '' }}>{{ __('Có thể đặt') }}</option>
-                                                    <option value="0" {{ $availability && !$availability->is_available ? 'selected' : '' }}>{{ __('Nghỉ') }}</option>
+                                                    <option value="1" {{ $availability && $availability->is_available ? 'selected' : '' }}>{{ __('Available') }}</option>
+                                                    <option value="0" {{ $availability && !$availability->is_available ? 'selected' : '' }}>{{ __('Off') }}</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -80,7 +80,7 @@
                                     <tr>
                                         <td colspan="4" class="text-end">
                                             <button type="submit" class="btn btn-primary px-4">
-                                                <i class="bi bi-save me-2"></i>{{ __('Lưu Lịch Làm Việc') }}
+                                                <i class="bi bi-save me-2"></i>{{ __('Save Schedule') }}
                                             </button>
                                         </td>
                                     </tr>

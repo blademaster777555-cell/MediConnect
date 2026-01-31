@@ -5,20 +5,34 @@
 @section('content')
 <div class="container my-5">
     <div class="row mb-4">
-        <div class="col-12">
+        <div class="col-md-8">
             <h1 class="display-6 fw-bold text-primary mb-3">
-                <i class="bi bi-calendar-check me-3"></i>
-                @if(request('filter') == 'upcoming')
-                    {{ __('Upcoming Appointments') }}
-                @elseif(request('filter') == 'history')
-                    {{ __('Appointment History') }}
-                @else
-                    {{ __('My Appointment History') }}
-                @endif
+                <i class="bi bi-calendar-check me-3"></i>{{ __('My Appointments') }}
             </h1>
             <p class="text-muted">{{ __('Track and manage your medical appointments') }}</p>
         </div>
+        <div class="col-md-4 text-md-end align-self-center">
+            @if(isset($appointments) && $appointments->count() > 0)
+                <a href="{{ route('doctors.index') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-plus-lg me-2"></i>{{ __('Book Appointment') }}
+                </a>
+            @endif
+        </div>
     </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link {{ request('filter') != 'history' ? 'active fw-bold' : '' }}" href="{{ route('my.appointments', ['filter' => 'upcoming']) }}">
+                <i class="bi bi-calendar-event me-2"></i>{{ __('Upcoming') }}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request('filter') == 'history' ? 'active fw-bold' : '' }}" href="{{ route('my.appointments', ['filter' => 'history']) }}">
+                <i class="bi bi-clock-history me-2"></i>{{ __('History') }}
+            </a>
+        </li>
+    </ul>
 
     @if(session('success'))
         <div class="alert alert-success card-shadow border-0 border-start border-success border-4 mb-4">
@@ -80,19 +94,27 @@
                             </td>
                             <td class="text-center">
                                 @if($appt->status == 'completed' || $appt->status == 'Completed')
-                                    @if($appt->feedback)
-                                        <span class="badge bg-secondary"><i class="bi bi-star-fill"></i> {{ __('Rated') }}</span>
-                                    @else
-                                        <a href="{{ route('feedback.create', $appt->id) }}" class="btn btn-sm btn-outline-warning">
-                                            <i class="bi bi-star"></i> {{ __('Rate') }}
-                                        </a>
-                                    @endif
+                                    <div class="d-flex flex-column gap-2">
+                                        @if($appt->medicalRecord)
+                                            <a href="{{ route('medical-records.show', $appt->medicalRecord->id) }}" class="btn btn-sm btn-info text-white">
+                                                <i class="bi bi-file-medical-fill"></i> {{ __('Medical Record') }}
+                                            </a>
+                                        @endif
+                                        
+                                        @if($appt->feedback)
+                                            <span class="badge bg-secondary py-2"><i class="bi bi-star-fill"></i> {{ __('Rated') }}</span>
+                                        @else
+                                            <a href="{{ route('feedback.create', $appt->id) }}" class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-star"></i> {{ __('Rate Service') }}
+                                            </a>
+                                        @endif
+                                    </div>
                                 @elseif(in_array($appt->status, ['pending', 'confirmed']))
                                     <form action="{{ route('appointment.cancel', $appt->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('POST')
                                         <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('{{ __('Are you sure you want to cancel this appointment?') }}')">
+                                                onclick="return confirmAction(event, '{{ __('Are you sure you want to cancel this appointment?') }}')">
                                             <i class="bi bi-x-circle"></i> {{ __('Cancel') }}
                                         </button>
                                     </form>
@@ -108,7 +130,13 @@
             @else
                 <div class="text-center py-5">
                     <i class="bi bi-calendar-x fs-1 text-muted mb-3"></i>
-                    <h5 class="text-muted mb-3">{{ __('You have no medical appointments.') }}</h5>
+                    <h5 class="text-muted mb-3">
+                        @if(request('filter') == 'history')
+                            {{ __('No appointment history found.') }}
+                        @else
+                            {{ __('You have no upcoming appointments.') }}
+                        @endif
+                    </h5>
                     <a href="{{ route('doctors.index') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
                         <i class="bi bi-plus-lg me-2"></i>{{ __('Book Appointment Now') }}
                     </a>

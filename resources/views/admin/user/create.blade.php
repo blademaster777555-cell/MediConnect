@@ -3,7 +3,7 @@
 @section('content')
 <div class="card shadow-sm">
     <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">{{ __('Thêm người dùng mới') }}</h5>
+        <h5 class="mb-0">{{ __('Add New User') }}</h5>
     </div>
     <div class="card-body">
         <form action="{{ route('users.store') }}" method="POST">
@@ -11,27 +11,27 @@
             
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">{{ __('Họ và tên') }}</label>
-                    <input type="text" name="name" class="form-control" required placeholder="{{ __('VD: BS. Nguyễn Văn A') }}">
+                    <label class="form-label">{{ __('Full Name') }}</label>
+                    <input type="text" name="name" class="form-control" required placeholder="{{ __('Ex: Dr. John Doe') }}">
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">{{ __('Email đăng nhập') }}</label>
+                    <label class="form-label">{{ __('Email') }}</label>
                     <input type="email" name="email" class="form-control" required>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">{{ __('Mật khẩu') }}</label>
+                    <label class="form-label">{{ __('Password') }}</label>
                     <input type="password" name="password" class="form-control" required>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">{{ __('Số điện thoại') }}</label>
+                    <label class="form-label">{{ __('Phone Number') }}</label>
                     <input type="text" name="phone" class="form-control">
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">{{ __('Thành phố') }}</label>
+                    <label class="form-label">{{ __('City') }}</label>
                     <select name="city_id" class="form-select">
                         @foreach($cities as $city)
                             <option value="{{ $city->id }}">{{ $city->name }}</option>
@@ -40,15 +40,15 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold text-danger">{{ __('Vai trò') }}</label>
+                    <label class="form-label fw-bold text-danger">{{ __('Role') }}</label>
                     <select name="role" class="form-select" id="roleSelect">
-                        <option value="{{ \App\Models\User::ROLE_PATIENT }}">{{ __('Bệnh nhân') }}</option>
-                        <option value="{{ \App\Models\User::ROLE_DOCTOR }}">{{ __('Bác sĩ') }}</option>
+                        <option value="{{ \App\Models\User::ROLE_PATIENT }}">{{ __('Patient') }}</option>
+                        <option value="{{ \App\Models\User::ROLE_DOCTOR }}">{{ __('Doctor') }}</option>
                     </select>
                 </div>
 
                 <div class="col-md-6 mb-3" id="specializationDiv" style="display: none;">
-                    <label class="form-label">{{ __('Chuyên khoa') }}</label>
+                    <label class="form-label">{{ __('Specialization') }}</label>
                     <select name="specialization_id" class="form-select">
                         @foreach($specializations as $spec)
                             <option value="{{ $spec->id }}">{{ $spec->name }}</option>
@@ -58,9 +58,9 @@
             </div>
 
             <button type="submit" class="btn btn-primary">
-                <i class="bi bi-save"></i> {{ __('Lưu tài khoản') }}
+                <i class="bi bi-save"></i> {{ __('Save Account') }}
             </button>
-            <a href="{{ route('users.index') }}" class="btn btn-secondary">{{ __('Hủy') }}</a>
+            <a href="{{ route('users.index') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
         </form>
     </div>
 </div>

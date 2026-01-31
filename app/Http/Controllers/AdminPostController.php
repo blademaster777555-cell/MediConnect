@@ -36,12 +36,12 @@ class AdminPostController extends Controller
             'type' => $request->type,
         ]);
 
-        return redirect()->route('posts.index')->with('success', 'Đăng bài thành công!');
+        return redirect()->route('posts.index')->with('success', __('Post published successfully!'));
     }
     
     // 4. Xóa bài
     public function destroy($id) {
         Post::destroy($id);
-        return redirect()->back()->with('success', 'Đã xóa bài viết');
+        return redirect()->back()->with('success', __('Post deleted successfully.'));
     }
 }

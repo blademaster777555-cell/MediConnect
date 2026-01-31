@@ -52,4 +52,9 @@ class Appointment extends Model
     {
         return $this->hasOne(Feedback::class);
     }
+    
+    public function medicalRecord()
+    {
+        return $this->hasOne(MedicalRecord::class);
+    }
 }

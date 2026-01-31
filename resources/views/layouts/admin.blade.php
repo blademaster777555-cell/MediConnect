@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://npmcdn.com/flatpickr/dist/l10n/vn.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -76,17 +75,18 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">{{ __('Overview') }}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}" href="{{ route('admin.doctors.index') }}">{{ __('Manage Doctors') }}</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ request()->routeIs('admin.doctors.*') || request()->routeIs('admin.patients.*') || request()->routeIs('cities.*') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ __('Management') }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('admin.doctors.index') }}">{{ __('Manage Doctors') }}</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.patients.index') }}">{{ __('Manage Patients') }}</a></li>
+                                <li><a class="dropdown-item" href="{{ route('cities.index') }}">{{ __('Manage Cities') }}</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.patients.*') ? 'active' : '' }}" href="{{ route('admin.patients.index') }}">{{ __('Manage Patients') }}</a>
-                        </li>
-                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('medical-content.*') ? 'active' : '' }}" href="{{ route('medical-content.index') }}">{{ __('News & Diseases') }}</a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cities.*') ? 'active' : '' }}" href="{{ route('cities.index') }}">{{ __('Manage Cities') }}</a>
                         </li>
                          <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.feedbacks.*') ? 'active' : '' }}" href="{{ route('admin.feedbacks.index') }}">{{ __('Feedback') }}</a>
@@ -114,7 +114,7 @@
                 <ul class="navbar-nav">
                     @if(Auth::check() && Auth::user()->role === 'admin')
                     <li class="nav-item me-3 position-relative d-flex align-items-center">
-                        <a class="nav-link" href="{{ route('admin.notifications.index') }}">
+                        <a class="nav-link" href="{{ route('notifications.index') }}">
                             <i class="bi bi-bell-fill fs-5"></i>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-count" style="display: none;">
                                 0
@@ -217,7 +217,7 @@
 
                 <div class="col-lg-4 mb-4">
                     <h5 class="fw-bold">{{ __('Contact Us') }}</h5>
-                    <p><i class="bi bi-geo-alt me-2"></i>{{ __('123 Đường ABC, Quận 1, TP.HCM') }}</p>
+                    <p><i class="bi bi-geo-alt me-2"></i>{{ __('123 ABC Street, District 1, HCMC') }}</p>
                     <p><i class="bi bi-telephone me-2"></i>(028) 1234 5678</p>
                     <p><i class="bi bi-envelope me-2"></i>contact@mediconnect.vn</p>
                 </div>
@@ -239,14 +239,60 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Global confirmation handler
+        window.confirmAction = function(event, message) {
+            event.preventDefault();
+            const target = event.currentTarget; 
+            
+            Swal.fire({
+                title: '{{ __("Are you sure?") }}',
+                text: message || '{{ __("You won\'t be able to revert this!") }}',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: '{{ __("Yes, proceed!") }}',
+                cancelButtonText: '{{ __("Cancel") }}'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (target.tagName === 'FORM') {
+                        target.submit();
+                    } else if (target.tagName === 'A') {
+                        if (target.href) {
+                            window.location.href = target.href;
+                        }
+                    } else if (target.tagName === 'BUTTON' && target.type === 'submit' && target.form) {
+                        target.form.submit();
+                    }
+                }
+            });
+            return false;
+        };
+    </script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             function checkNotifications() {
-                // ... (existing notification logic) ...
+                fetch('{{ route('api.notifications.unread-count') }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        const count = data.unread_count;
+                        const badge = document.getElementById('notification-count');
+                        if (badge) {
+                            badge.innerText = count;
+                            if (count > 0) {
+                                badge.style.display = 'inline-block';
+                            } else {
+                                badge.style.display = 'none';
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Error fetching notifications:', error));
             }
 
             // Check immediately and then every 30 seconds
             if(document.getElementById('notification-count')) {
-                // ...
+                checkNotifications();
+                setInterval(checkNotifications, 30000);
             }
         });
 

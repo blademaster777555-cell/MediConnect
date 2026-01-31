@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="container-fluid">
-    <h1 class="h3 mb-4 text-gray-800">{{ __('Chi tiết phản hồi') }} #{{ $feedback->id }}</h1>
+    <h1 class="h3 mb-4 text-gray-800">{{ __('Feedback Details') }} #{{ $feedback->id }}</h1>
 
     <div class="row">
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ __('Nội dung đánh giá') }}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">{{ __('Rating Content') }}</h6>
                 </div>
                 <div class="card-body">
                     <div class="mb-4 text-center">
@@ -27,25 +27,25 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label class="fw-bold">{{ __('Nhận xét:') }}</label>
+                        <label class="fw-bold">{{ __('Comment:') }}</label>
                         <div class="p-3 bg-light rounded border">
-                            {{ $feedback->comment ?? __('Không có nhận xét') }}
+                            {{ $feedback->comment ?? __('No comment') }}
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <small class="text-muted">{{ __('Ngày gửi:') }} {{ $feedback->created_at->format('d/m/Y H:i') }}</small>
+                        <small class="text-muted">{{ __('Submitted at:') }} {{ $feedback->created_at->format('d/m/Y H:i') }}</small>
                     </div>
 
                     <div class="mt-4">
                         <form action="{{ route('admin.feedbacks.destroy', $feedback->id) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('{{ __('Bạn có chắc muốn xóa phản hồi này?') }}')">
-                                <i class="bi bi-trash me-2"></i>{{ __('Xóa phản hồi') }}
+                            <button type="submit" class="btn btn-danger" onclick="return confirmAction(event, '{{ __('Are you sure you want to delete this feedback?') }}')">
+                                <i class="bi bi-trash me-2"></i>{{ __('Delete Feedback') }}
                             </button>
                         </form>
-                        <a href="{{ route('admin.feedbacks.index') }}" class="btn btn-secondary ms-2">{{ __('Quay lại') }}</a>
+                        <a href="{{ route('admin.feedbacks.index') }}" class="btn btn-secondary ms-2">{{ __('Back') }}</a>
                     </div>
                 </div>
             </div>
@@ -54,10 +54,10 @@
         <div class="col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">{{ __('Thông tin liên quan') }}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">{{ __('Related Information') }}</h6>
                 </div>
                 <div class="card-body">
-                    <h6 class="fw-bold">{{ __('Bệnh nhân') }}</h6>
+                    <h6 class="fw-bold">{{ __('Patient') }}</h6>
                     <div class="d-flex align-items-center mb-3">
                         <img src="https://ui-avatars.com/api/?name={{ $feedback->appointment->patientProfile->user->name }}" class="rounded-circle me-3" width="50">
                         <div>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <hr>
-                    <h6 class="fw-bold">{{ __('Bác sĩ') }}</h6>
+                    <h6 class="fw-bold">{{ __('Doctor') }}</h6>
                     <div class="d-flex align-items-center mb-3">
                         <img src="https://ui-avatars.com/api/?name={{ $feedback->appointment->doctorProfile->user->name }}" class="rounded-circle me-3" width="50">
                         <div>
@@ -75,10 +75,10 @@
                         </div>
                     </div>
                     <hr>
-                    <h6 class="fw-bold">{{ __('Lịch hẹn') }}</h6>
+                    <h6 class="fw-bold">{{ __('Appointment') }}</h6>
                     <p class="mb-1"><strong>ID:</strong> #{{ $feedback->appointment_id }}</p>
-                    <p class="mb-1"><strong>{{ __('Ngày khám:') }}</strong> {{ \Carbon\Carbon::parse($feedback->appointment->date)->format('d/m/Y') }}</p>
-                    <p class="mb-0"><strong>{{ __('Giờ khám:') }}</strong> {{ $feedback->appointment->time }}</p>
+                    <p class="mb-1"><strong>{{ __('Date:') }}</strong> {{ \Carbon\Carbon::parse($feedback->appointment->date)->format('d/m/Y') }}</p>
+                    <p class="mb-0"><strong>{{ __('Time:') }}</strong> {{ $feedback->appointment->time }}</p>
                 </div>
             </div>
         </div>
